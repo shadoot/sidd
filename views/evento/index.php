@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Fa Eventos';
+$this->title = 'Eventos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fa-evento-index">
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Fa Evento', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear eventos', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <p>
         <?= Html::a('Calendario',['calendar'],['class'=>'btn btn-success'])?>
