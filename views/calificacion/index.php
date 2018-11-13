@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Fa Calificacions';
+$this->title = 'Calificaciones';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fa-calificacion-index">
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Fa Calificacion', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Registrar Calificacion', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

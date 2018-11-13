@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\FaListaRegistro */
 
 $this->title = $model->id_lista_registro;
-$this->params['breadcrumbs'][] = ['label' => 'Fa Lista Registros', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Lista Registros', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fa-lista-registro-view">

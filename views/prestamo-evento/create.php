@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\models\FiPrestamoEvento */
 
 $this->title = 'Create Fi Prestamo Evento';
-$this->params['breadcrumbs'][] = ['label' => 'Fi Prestamo Eventos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Prestamo', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fi-prestamo-evento-create">

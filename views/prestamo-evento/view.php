@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\FiPrestamoEvento */
 
 $this->title = $model->id_prestamo_evento;
-$this->params['breadcrumbs'][] = ['label' => 'Fi Prestamo Eventos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Prestamo Eventos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fi-prestamo-evento-view">

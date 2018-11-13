@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Fi Inventarios';
+$this->title = 'Inventario';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fi-inventario-index">
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Fi Inventario', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Control de inventario', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

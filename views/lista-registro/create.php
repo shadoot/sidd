@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\FaListaRegistro */
 
-$this->title = 'Create Fa Lista Registro';
-$this->params['breadcrumbs'][] = ['label' => 'Fa Lista Registros', 'url' => ['index']];
+$this->title = 'Registrar';
+$this->params['breadcrumbs'][] = ['label' => 'Lista Registros', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fa-lista-registro-create">

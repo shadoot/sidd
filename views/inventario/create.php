@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\FiInventario */
 
-$this->title = 'Create Fi Inventario';
-$this->params['breadcrumbs'][] = ['label' => 'Fi Inventarios', 'url' => ['index']];
+$this->title = 'Control de inventario';
+$this->params['breadcrumbs'][] = ['label' => 'inventario', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fi-inventario-create">

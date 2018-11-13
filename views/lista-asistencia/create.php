@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\FaListaAsistencia */
 
-$this->title = 'Create Fa Lista Asistencia';
+$this->title = 'registro de asistencia';
 $this->params['breadcrumbs'][] = ['label' => 'Fa Lista Asistencias', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

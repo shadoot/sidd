@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\FaCalificacion */
 
-$this->title = 'Create Fa Calificacion';
-$this->params['breadcrumbs'][] = ['label' => 'Fa Calificacions', 'url' => ['index']];
+$this->title = 'Registrar Calificacion';
+$this->params['breadcrumbs'][] = ['label' => 'Calificaciones', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fa-calificacion-create">

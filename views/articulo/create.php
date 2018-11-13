@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\FiArticulo */
 
-$this->title = 'Create Fi Articulo';
-$this->params['breadcrumbs'][] = ['label' => 'Fi Articulos', 'url' => ['index']];
+$this->title = 'Registrar Articulos';
+$this->params['breadcrumbs'][] = ['label' => ' Articulos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fi-articulo-create">
