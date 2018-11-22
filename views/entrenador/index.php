@@ -6,26 +6,25 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Registro';
+$this->title = 'Entrenadores';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="fa-lista-registro-index">
+<div class="fh-entrenador-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Registrar', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Registrar Entrenador', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            
-            'nombre',
-            'fecha_registro',
-            'Número de Control',
-            'Alumno',
+
+            'id_entrenador',
+            'id_persona',
+
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

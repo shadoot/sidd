@@ -70,4 +70,23 @@ class FhAlumno extends \yii\db\ActiveRecord
     {
         return $this->hasMany(FaListaRegistro::className(), ['id_Alumno' => 'id_Alumno']);
     }
+
+    public function getAllNumeroControl()
+    {
+        $allNumeroControl;
+        $query = (new \yii\db\Query())
+            ->select('Num_Control')
+            ->from('fh_alumno');
+        //  Crear un comando. Se puede obtener la consulta SQL actual utilizando $command->sql
+        $command = $query->createCommand();
+
+        // Ejecutar el comando:
+        $row = $command->queryAll();
+        foreach ($row as $key => $alumno) {
+            foreach ($alumno as $control => $value) {
+                $allNumeroControl[]=$value;
+            }
+        }
+        return $allNumeroControl;
+    }
 }

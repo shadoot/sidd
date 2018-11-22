@@ -36,6 +36,7 @@ class FaListaRegistro extends \yii\db\ActiveRecord
             [['fecha_registro'], 'safe'],
             [['id_Alumno'], 'exist', 'skipOnError' => true, 'targetClass' => FhAlumno::className(), 'targetAttribute' => ['id_Alumno' => 'id_Alumno']],
             [['id_actividad_deportiva'], 'exist', 'skipOnError' => true, 'targetClass' => FaActividadDeportiva::className(), 'targetAttribute' => ['id_actividad_deportiva' => 'id_actividad_deportiva']],
+            [['id_Alumno'],'required'],
         ];
     }
 
@@ -46,8 +47,8 @@ class FaListaRegistro extends \yii\db\ActiveRecord
     {
         return [
             'id_lista_registro' => 'Id Lista Registro',
-            'id_Alumno' => 'Id  Alumno',
-            'id_actividad_deportiva' => 'Id Actividad Deportiva',
+            'id_Alumno' => 'Alumno',
+            'id_actividad_deportiva' => 'Actividad Deportiva',
             'fecha_registro' => 'Fecha Registro',
         ];
     }

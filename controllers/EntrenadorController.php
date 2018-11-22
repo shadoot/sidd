@@ -3,16 +3,18 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\FaListaAsistencia;
+use app\models\FhEntrenador;
+use app\models\FhPersona;
+use app\models\FhContacto;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ListaAsistenciaController implements the CRUD actions for FaListaAsistencia model.
+ * EntrenadorController implements the CRUD actions for FhEntrenador model.
  */
-class ListaAsistenciaController extends Controller
+class EntrenadorController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,13 +32,13 @@ class ListaAsistenciaController extends Controller
     }
 
     /**
-     * Lists all FaListaAsistencia models.
+     * Lists all FhEntrenador models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => FaListaAsistencia::find(),
+            'query' => FhEntrenador::find(),
         ]);
 
         return $this->render('index', [
@@ -45,38 +47,65 @@ class ListaAsistenciaController extends Controller
     }
 
     /**
-     * Displays a single FaListaAsistencia model.
+     * Displays a single FhEntrenador model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+        $entrenador=FhEntrenador::findOne($id);
+        $persona=FhPersona::findOne($entrenador->id_persona);
+        $contacto=FhContacto::findOne($persona->id_Persona,'id_Persona');
+        //var_dump($entrenador);
+        //echo "<br><br><br><br><br>";
+        //var_dump($persona);
+        //echo "<br><br><br><br><br>";
+        //var_dump($contacto);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'entrenador' => $entrenador,
+            'persona' => $persona,
+            'contacto' => $contacto,
         ]);
     }
 
     /**
-     * Creates a new FaListaAsistencia model.
+     * Creates a new FhEntrenador,FhPersona and FhContacto model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new FaListaAsistencia();
-        
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_lista]);
+        $entrenador = new FhEntrenador();
+        $persona = new FhPersona();
+        $contacto = new FhContacto();
+
+
+        if ($persona->load(Yii::$app->request->post()) && $contacto->load(Yii::$app->request->post())) {
+            
+            if ($persona->save()) {
+                $contacto->id_Persona=$persona->id_Persona;
+                if($contacto->save()){
+                    $entrenador->id_persona=$persona->id_Persona;
+                    if ($entrenador->save()) {
+                        return $this->redirect(['view', 'id' => $entrenador->id_entrenador]);
+                    }
+                }
+            }
+            
+            
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'entrenador' => $entrenador,
+            'persona' => $persona,
+            'contacto' => $contacto,
         ]);
     }
 
     /**
-     * Updates an existing FaListaAsistencia model.
+     * Updates an existing FhEntrenador model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -87,7 +116,7 @@ class ListaAsistenciaController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_lista]);
+            return $this->redirect(['view', 'id' => $model->id_entrenador]);
         }
 
         return $this->render('update', [
@@ -96,7 +125,7 @@ class ListaAsistenciaController extends Controller
     }
 
     /**
-     * Deletes an existing FaListaAsistencia model.
+     * Deletes an existing FhEntrenador model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -110,15 +139,15 @@ class ListaAsistenciaController extends Controller
     }
 
     /**
-     * Finds the FaListaAsistencia model based on its primary key value.
+     * Finds the FhEntrenador model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return FaListaAsistencia the loaded model
+     * @return FhEntrenador the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = FaListaAsistencia::findOne($id)) !== null) {
+        if (($model = FhEntrenador::findOne($id)) !== null) {
             return $model;
         }
 

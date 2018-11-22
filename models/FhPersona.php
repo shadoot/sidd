@@ -50,11 +50,11 @@ class FhPersona extends \yii\db\ActiveRecord
         return [
             'id_Persona' => 'Id  Persona',
             'Nombre' => 'Nombre',
-            'Ap_Pataterno' => 'Ap  Pataterno',
-            'Ap_Materno' => 'Ap  Materno',
+            'Ap_Pataterno' => 'Apellido Paterno',
+            'Ap_Materno' => 'Apellido Materno',
             'Genero' => 'Genero',
-            'ECivil' => 'Ecivil',
-            'FNacimiento' => 'Fnacimiento',
+            'ECivil' => 'Estado Civil',
+            'FNacimiento' => 'Fecha de Nacimiento',
         ];
     }
 

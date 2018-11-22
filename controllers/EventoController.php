@@ -62,15 +62,23 @@ class EventoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($date)
+    public function actionCreate($date=null)
     {
         $model = new FaEvento();
-        $model->Fecha=$date;
+        if (isset($date)) {
+            $model->Fecha=$date;
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['calendar']);
         }
-
-        return $this->renderAjax('create', [
+        if (isset($date)) {
+            return $this->renderAjax('create', [
+                'model' => $model,
+            ]);
+        }
+        
+        return $this->render('create', [
             'model' => $model,
         ]);
     }

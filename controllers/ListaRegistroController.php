@@ -9,6 +9,7 @@ use yii\data\SqlDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\FhAlumno;
 
 /**
  * ListaRegistroController implements the CRUD actions for FaListaRegistro model.
@@ -44,9 +45,10 @@ class ListaRegistroController extends Controller
             'sql'=>$sql1,
         ]);*/
 
-        $sql1="SELECT d.nombre, r.fecha_registro,a.Num_Control as 'Número de Control', CONCAT(p.Nombre,' ', p.Ap_Pataterno,' ',p.Ap_Materno) as Alumno FROM fa_lista_registro r, fa_actividad_deportiva d, fh_persona p, fh_alumno a WHERE a.id_Persona=p.id_Persona AND r.id_Alumno=a.id_Alumno";
+        $sql1="SELECT r.id_lista_registro, d.nombre, r.fecha_registro,a.Num_Control as 'Número de Control', CONCAT(p.Nombre,' ', p.Ap_Pataterno,' ',p.Ap_Materno) as Alumno FROM fa_lista_registro r, fa_actividad_deportiva d, fh_persona p, fh_alumno a WHERE a.id_Persona=p.id_Persona AND r.id_Alumno=a.id_Alumno AND r.id_actividad_deportiva = d.id_actividad_deportiva";
         $provider=new SqlDataProvider([
             'sql'=>$sql1,
+            'key' => 'id_lista_registro',
         ]);
 
         return $this->render('index', [
@@ -62,6 +64,7 @@ class ListaRegistroController extends Controller
      */
     public function actionView($id)
     {
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -75,9 +78,18 @@ class ListaRegistroController extends Controller
     public function actionCreate()
     {
         $model = new FaListaRegistro();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_lista_registro]);
+        if ($model->load(Yii::$app->request->post())) {
+            $query = (new \yii\db\Query())
+                ->select('id_Alumno')
+                ->from('fh_alumno')
+                ->where('Num_Control=:Num_Control');
+            $query->addParams([':Num_Control' => $model->id_Alumno]);
+            $command = $query->createCommand();
+            $row = $command->queryAll();
+            $model->id_Alumno=$row[0]['id_Alumno'];
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id_lista_registro]);
+            }
         }
 
         return $this->render('create', [
