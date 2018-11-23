@@ -34,10 +34,10 @@ class FaActividadDeportiva extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_Persona', 'id_Periodo'], 'integer'],
+            [['id_entrenador'], 'integer'],
             [['nombre'], 'string', 'max' => 15],
-            [['id_Persona'], 'exist', 'skipOnError' => true, 'targetClass' => FhPersona::className(), 'targetAttribute' => ['id_Persona' => 'id_Persona']],
-            [['id_Periodo'], 'exist', 'skipOnError' => true, 'targetClass' => FaPeriodo::className(), 'targetAttribute' => ['id_Periodo' => 'id_Periodo']],
+            [['id_entrenador'],'required'],
+            [['id_entrenador'], 'exist', 'skipOnError' => true, 'targetClass' => FhPersona::className(), 'targetAttribute' => ['id_Persona' => 'id_Persona']],
         ];
     }
 
@@ -48,26 +48,17 @@ class FaActividadDeportiva extends \yii\db\ActiveRecord
     {
         return [
             'id_actividad_deportiva' => 'Id Actividad Deportiva',
-            'nombre' => 'Nombre',
-            'id_Persona' => 'Id  Persona',
-            'id_Periodo' => 'Id  Periodo',
+            'nombre' => 'Nombre de la Actividad Deportiva',
+            'id_entrenador' => 'Entrenador',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPersona()
+    public function getEntrenador()
     {
-        return $this->hasOne(FhPersona::className(), ['id_Persona' => 'id_Persona']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPeriodo()
-    {
-        return $this->hasOne(FaPeriodo::className(), ['id_Periodo' => 'id_Periodo']);
+        return $this->hasOne(FhEntrenador::className(), ['id_entrenador' => 'id_entrenador']);
     }
 
     /**

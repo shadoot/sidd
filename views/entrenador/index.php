@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $dataProvider yii\data\SqlProvider */
 
 $this->title = 'Entrenadores';
 $this->params['breadcrumbs'][] = $this->title;
@@ -18,12 +18,17 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
+        'dataProvider' => $provider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id_entrenador',
-            'id_persona',
+            'Nombre Completo',
+            'Celular',
+            /*[
+                'label' => 'Telefono Movil',
+                'value' => $provider,
+            ],*/
+            'Correo Electrónico',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

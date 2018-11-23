@@ -49,4 +49,17 @@ class FhContacto extends \yii\db\ActiveRecord
             'id_Persona' => 'Id  Persona',
         ];
     }
+
+
+    public function getContacto($id_persona)
+    {
+        $query = (new \yii\db\Query())
+            ->select('id_Contacto')
+            ->from('fh_contacto')
+            ->where('id_Persona=:Num_Control');
+        $query->addParams([':Num_Control' => $id_persona]);
+        $command = $query->createCommand();
+        $row = $command->queryAll();
+        return $row[0]['id_Contacto'];
+    }
 }

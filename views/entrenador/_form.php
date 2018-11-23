@@ -29,6 +29,12 @@ use yii\widgets\ActiveForm;
     <?=	$form->field($persona,'FNacimiento')->widget(\yii\jui\DatePicker::class, [
     	'language' => 'es',
     	'dateFormat' => 'yyyy-MM-dd',
+        'clientOptions' => [
+            'yearRange' => '-80:+0',
+            'changeYear' => true,
+            'changeMonth' => true,
+        ],
+        'options' => ['class' => 'form-control', 'style' => 'width:25%']
     ]) ?>
 
     <?=	$form->field($contacto,'Tel_Fijo')->textInput() ?>

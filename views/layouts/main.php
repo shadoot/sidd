@@ -41,7 +41,8 @@ AppAsset::register($this);
             ['label' => 'Casa', 'url' => ['/site/index']],
             ['label' => 'Actividades', 'url' => ['/site/about'], 'items'=>[
                 ['label'=>'Lista de registro de actividades', 'url'=>['/lista-registro/index']],
-                ['label'=>'2da Sub-Actividad', 'url'=>['/lista-registro/index']],
+                ['label'=>'Lista Entrenadores', 'url'=>['/entrenador/index']],
+                ['label'=>'Lista de Actividades Deportivas', 'url'=>['/actividad-deportiva/index']],
             ]],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]

@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Fa Actividad Deportivas';
+$this->title = 'Listas de Actividades Deportivas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fa-actividad-deportiva-index">
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Fa Actividad Deportiva', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Registar Actividad Deportiva', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -24,8 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id_actividad_deportiva',
             'nombre',
-            'id_Persona',
-            'id_Periodo',
+            'id_entrenador',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

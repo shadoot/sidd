@@ -6,7 +6,7 @@ use Yii;
 use app\models\FhEntrenador;
 use app\models\FhPersona;
 use app\models\FhContacto;
-use yii\data\ActiveDataProvider;
+use yii\data\SqlDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,12 +37,19 @@ class EntrenadorController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => FhEntrenador::find(),
+        $sql="SELECT id_entrenador,
+        CONCAT(Nombre, ' ',Ap_Pataterno,' ',Ap_Materno) as 'Nombre Completo'
+        ,Tel_Movil as Celular,e_mail as 'Correo Electrónico'
+        FROM fh_entrenador e 
+        INNER JOIN fh_persona p ON e.id_persona=p.id_Persona 
+        INNER JOIN fh_contacto c ON p.id_Persona=c.id_Persona";
+        $provider=new SqlDataProvider([
+            'sql' => $sql,
+            'key' => 'id_entrenador',
         ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'provider' => $provider,
         ]);
     }
 
@@ -56,13 +63,8 @@ class EntrenadorController extends Controller
     {
         $entrenador=FhEntrenador::findOne($id);
         $persona=FhPersona::findOne($entrenador->id_persona);
-        $contacto=FhContacto::findOne($persona->id_Persona,'id_Persona');
-        //var_dump($entrenador);
-        //echo "<br><br><br><br><br>";
-        //var_dump($persona);
-        //echo "<br><br><br><br><br>";
-        //var_dump($contacto);
-
+        $contacto=FhContacto::findOne(FhContacto::getContacto($persona->id_Persona));
+        
         return $this->render('view', [
             'entrenador' => $entrenador,
             'persona' => $persona,
@@ -71,7 +73,7 @@ class EntrenadorController extends Controller
     }
 
     /**
-     * Creates a new FhEntrenador,FhPersona and FhContacto model.
+     * Creates a new FhEntrenador,FhPersona and FhContacto models.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -113,14 +115,26 @@ class EntrenadorController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $entrenador=FhEntrenador::findOne($id);
+        $persona=FhPersona::findOne($entrenador->id_persona);
+        $contacto=FhContacto::findOne(FhContacto::getContacto($persona->id_Persona));
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_entrenador]);
+        if ($persona->load(Yii::$app->request->post()) && $contacto->load(Yii::$app->request->post())) {
+            if ($persona->save()) {
+                $contacto->id_Persona=$persona->id_Persona;
+                if($contacto->save()){
+                    $entrenador->id_persona=$persona->id_Persona;
+                    if ($entrenador->save()) {
+                        return $this->redirect(['view', 'id' => $entrenador->id_entrenador]);
+                    }
+                }
+            }
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'entrenador' => $entrenador,
+            'persona' => $persona,
+            'contacto' => $contacto,
         ]);
     }
 

@@ -8,8 +8,8 @@ use yii\widgets\DetailView;
 /* @var $persona app\models\FhPersona */
 /* @var $contacto app\models\FhContacto */
 
-$this->title = $entrenador->id_entrenador;
-$this->params['breadcrumbs'][] = ['label' => 'Fh Entrenadors', 'url' => ['index']];
+$this->title = $persona->Nombre . ' ' . $persona->Ap_Pataterno. ' ' . $persona->Ap_Materno;
+$this->params['breadcrumbs'][] = ['label' => 'Lista de Entrenadores', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fh-entrenador-view">
@@ -17,11 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $entrenador->id_entrenador], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $entrenador->id_entrenador], [
+        <?= Html::a('Modificar', ['update', 'id' => $entrenador->id_entrenador], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Eliminar', ['delete', 'id' => $entrenador->id_entrenador], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => '¿Estas seguro de eliminar este elemento?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -34,10 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Nombre Completo',
                 'value' => $persona->Nombre . ' ' . $persona->Ap_Pataterno. ' ' . $persona->Ap_Materno,
             ],
-            /*[
+            [
                 'label' => 'Telefono',
                 'value' => $contacto->Tel_Movil,
-            ],*/
+            ],
+            [
+                'label' => 'Correo Electronico',
+                'value' => $contacto->e_mail,
+            ],
         ],
     ]) ?>
 

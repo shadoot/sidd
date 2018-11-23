@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use app\models\FaActividadDeportiva;
+use app\models\FhEntrenador;
+use app\models\FhPersona;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -64,14 +66,31 @@ class ActividadDeportivaController extends Controller
      */
     public function actionCreate()
     {
-        $model = new FaActividadDeportiva();
+        $actividad = new FaActividadDeportiva();
+        $entrenador = new FhEntrenador();
+        $persona = new FhPersona();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_actividad_deportiva]);
+        $personaTemporal = new \yii\base\DynamicModel([
+            'id_temporal',
+            'nombre',
+        ]);
+        $personaTemporal->addRule(['nombre'], 'required')
+            ->addRule(['id_temporal'],'integer')
+            ->addRule('nombre', 'string',['max'=>107]);
+        //if($personaTemporal->hasErrors()){ validation fails  }else{ validation succeeds}
+        if ($personaTemporal->load(Yii::$app->request->post())) {
+                echo $personaTemporal->nombre;
+                exit();
+            }    
+        if ($actividad->load(Yii::$app->request->post()) && $actividad->save() ) {
+            return $this->redirect(['view', 'id' => $actividad->id_actividad_deportiva]);
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'actividad' => $actividad,
+            'entrenador' => $entrenador,
+            'persona' => $persona,
+            'personaTemporal' => $personaTemporal,
         ]);
     }
 
