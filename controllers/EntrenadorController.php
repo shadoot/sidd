@@ -77,14 +77,13 @@ class EntrenadorController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($data=null)
     {
         $entrenador = new FhEntrenador();
         $persona = new FhPersona();
         $contacto = new FhContacto();
-
-
-        if ($persona->load(Yii::$app->request->post()) && $contacto->load(Yii::$app->request->post())) {
+        
+        if ($persona->load(Yii::$app->request->post()) && $contacto->load(Yii::$app->request->post()) && !isset($data)) {
             
             if ($persona->save()) {
                 $contacto->id_Persona=$persona->id_Persona;
@@ -94,9 +93,32 @@ class EntrenadorController extends Controller
                         return $this->redirect(['view', 'id' => $entrenador->id_entrenador]);
                     }
                 }
+            }            
+        }
+
+        if (isset($data)) {
+
+            if ($persona->load(Yii::$app->request->post()) && $contacto->load(Yii::$app->request->post())) {
+            if ($persona->save()) {
+                    $contacto->id_Persona=$persona->id_Persona;
+                    if($contacto->save()){
+                        $entrenador->id_persona=$persona->id_Persona;
+                        if ($entrenador->save()) {
+                            return $this->redirect(
+                                [
+                                    '/actividad-deportiva/create',
+                                    'id_entrenador' => $entrenador->id_entrenador
+                                ]);
+                        }
+                    }
+                }                
             }
-            
-            
+
+            return $this->renderAjax('create', [
+                'entrenador' => $entrenador,
+                'persona' => $persona,
+                'contacto' => $contacto,
+            ]);
         }
 
         return $this->render('create', [

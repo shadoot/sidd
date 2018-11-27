@@ -22,11 +22,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id_actividad_deportiva',
+            //'id_actividad_deportiva',
             'nombre',
-            'id_entrenador',
+            'rama',
+            //'estado',
+            [   
+                'attribute' => 'estado',
+                'label' => 'Estado',
+                'value' => function($data)
+                {
+                    return ($data->estado=='1') ? 'Vigente' : 'Cancelado' ;;
+                },
+            ],
+            //'id_entrenador',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>
+

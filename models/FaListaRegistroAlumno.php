@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "fa_lista_registro".
+ * This is the model class for table "fa_lista_registro_alumno".
  *
  * @property int $id_lista_registro
  * @property int $id_Alumno
@@ -16,14 +16,14 @@ use Yii;
  * @property FhAlumno $alumno
  * @property FaActividadDeportiva $actividadDeportiva
  */
-class FaListaRegistro extends \yii\db\ActiveRecord
+class FaListaRegistroAlumno extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'fa_lista_registro';
+        return 'fa_lista_registro_alumno';
     }
 
     /**

@@ -53,4 +53,55 @@ class FhEntrenador extends \yii\db\ActiveRecord
     {
         return $this->hasOne(FhPersona::className(), ['id_Persona' => 'id_persona']);
     }
+
+    public function getIdEntrenador($id_persona)
+    {
+        $query = (new \yii\db\Query())
+            ->select('id_entrenador')
+            ->from('fh_entrenador')
+            ->where('id_persona=:persona');
+        $query->addParams([':persona' => $id_persona]);
+        $command = $query->createCommand();
+        $row = $command->queryAll();
+        return $row[0]['id_entrenador'];
+    }
+
+    public function getAllNameEntrenadores()
+    {
+        $allNameEntrenadores;
+        $query = (new \yii\db\Query())
+            ->select(["CONCAT(Nombre,' ',Ap_Pataterno,' ',Ap_Materno) as nombre",'e.id_entrenador'])
+            //->select('p.id_Persona')
+            ->from('fh_persona p')
+            ->innerjoin('fh_entrenador e','p.id_Persona=e.id_persona');
+        //  Crear un comando. Se puede obtener la consulta SQL actual utilizando $command->sql
+        $command = $query->createCommand();
+
+        // Ejecutar el comando:
+        $row = $command->queryAll();
+        foreach ($row as $key => $persona) {
+            $allNameEntrenadores[] = ['label' => $persona['nombre'],
+             'value' => $persona['nombre'],'id_entrenador' => $persona['id_entrenador']];
+            /*foreach ($persona as $nombre => $value) {
+                $allNameEntrenadores[][]=['label' => $nombre,
+                    'value' => $value];
+                //$allNameEntrenadores[]=$nombre;
+            }*/
+        }
+        return $allNameEntrenadores;
+    }
+
+    public function getNombreCompleto($id)
+    {
+        $query = (new \yii\db\Query())
+            ->select(["CONCAT(Nombre,' ',Ap_Pataterno,' ',Ap_Materno) as nombre"])
+            ->from('fh_persona p')
+            ->innerjoin('fh_entrenador e','p.id_Persona=e.id_persona')
+            ->where('e.id_entrenador=:id_entrenador');
+        $query->addParams([':id_entrenador' => $id]);
+        $command = $query->createCommand();
+        $row = $command->queryAll();
+        
+        return $row[0]['nombre'];
+    }
 }

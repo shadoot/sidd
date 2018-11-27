@@ -9,11 +9,11 @@ use Yii;
  *
  * @property int $id_actividad_deportiva
  * @property string $nombre
- * @property int $id_Persona
- * @property int $id_Periodo
+ * @property string $rama
+ * @property bool $estado
+ * @property int $id_entrenador
  *
- * @property FhPersona $persona
- * @property FaPeriodo $periodo
+ * @property FhEntrenador $entrenador
  * @property FaListaAsistencia[] $faListaAsistencias
  * @property FaListaRegistro[] $faListaRegistros
  * @property FiPrestamoActividad[] $fiPrestamoActividads
@@ -34,10 +34,10 @@ class FaActividadDeportiva extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_entrenador'], 'integer'],
+            [['nombre', 'rama'], 'required'],
+            [['estado'], 'boolean'],
             [['nombre'], 'string', 'max' => 15],
-            [['id_entrenador'],'required'],
-            [['id_entrenador'], 'exist', 'skipOnError' => true, 'targetClass' => FhPersona::className(), 'targetAttribute' => ['id_Persona' => 'id_Persona']],
+            [['rama'], 'string', 'max' => 7],
         ];
     }
 
@@ -47,19 +47,13 @@ class FaActividadDeportiva extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_actividad_deportiva' => 'Id Actividad Deportiva',
-            'nombre' => 'Nombre de la Actividad Deportiva',
-            'id_entrenador' => 'Entrenador',
+            'id_actividad_deportiva' => 'Actividad Deportiva',
+            'nombre' => 'Nombre',
+            'rama' => 'Rama',
+            'estado' => 'Estado',
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEntrenador()
-    {
-        return $this->hasOne(FhEntrenador::className(), ['id_entrenador' => 'id_entrenador']);
-    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -83,5 +77,34 @@ class FaActividadDeportiva extends \yii\db\ActiveRecord
     public function getFiPrestamoActividads()
     {
         return $this->hasMany(FiPrestamoActividad::className(), ['id_actividad_deportiva' => 'id_actividad_deportiva']);
+    }
+
+    public function getEstado()
+    {
+        return ($this->estado==1) ? "activo" : "cancelado";
+    }
+
+    public function getNombreActividadDeportiva($id)
+    {
+        $query = (new \yii\db\Query())
+            ->select('nombre')
+            ->from('fa_actividad_deportiva a')
+            ->where('a.id_actividad_deportiva=:id_actividad_deportiva');
+        $query->addParams([':id_actividad_deportiva' => $id]);
+        $command = $query->createCommand();
+        $row = $command->queryAll();
+        return $row[0]['nombre'];
+    }
+
+    public function getRamaActividad($id)
+    {
+        $query = (new \yii\db\Query())
+            ->select('rama')
+            ->from('fa_actividad_deportiva a')
+            ->where('a.id_actividad_deportiva=:id_actividad_deportiva');
+        $query->addParams([':id_actividad_deportiva' => $id]);
+        $command = $query->createCommand();
+        $row = $command->queryAll();
+        return $row[0]['rama'];
     }
 }

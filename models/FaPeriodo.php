@@ -55,4 +55,29 @@ class FaPeriodo extends \yii\db\ActiveRecord
     {
         return $this->hasMany(FaActividadDeportiva::className(), ['id_Periodo' => 'id_Periodo']);
     }
+
+    public function getPeriodo()
+    {
+        $query = (new \yii\db\Query())
+            ->select(['id_Periodo',"CONCAT(Periodo,' --> ',Año) as Periodo"])
+            ->from('fa_periodo');
+        $command = $query->createCommand();
+        $row = $command->queryAll();
+        return $row;
+    }
+
+    public function getPeriodoByID($id){
+        //$periodo='';
+        $query = (new \yii\db\Query())
+            ->select(["CONCAT(Periodo,' -- ',Año) as periodo"])
+            ->from('fa_periodo p')
+            
+            ->where('p.id_Periodo=:id')
+            ->limit(1)
+            ->addParams([':id' => $id]);
+        $command = $query->createCommand();
+        $row = $command->queryAll();
+
+        return $row[0]['periodo'];
+    }
 }

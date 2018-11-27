@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\FaListaRegistro;
+use app\models\FaListaRegistroAlumno;
 use yii\data\ActiveDataProvider;
 use yii\data\SqlDataProvider;
 use yii\web\Controller;
@@ -14,7 +14,7 @@ use app\models\FhAlumno;
 /**
  * ListaRegistroController implements the CRUD actions for FaListaRegistro model.
  */
-class ListaRegistroController extends Controller
+class ListaRegistroAlumnoController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -45,7 +45,7 @@ class ListaRegistroController extends Controller
             'sql'=>$sql1,
         ]);*/
 
-        $sql1="SELECT r.id_lista_registro, d.nombre, r.fecha_registro,a.Num_Control as 'Número de Control', CONCAT(p.Nombre,' ', p.Ap_Pataterno,' ',p.Ap_Materno) as Alumno FROM fa_lista_registro r, fa_actividad_deportiva d, fh_persona p, fh_alumno a WHERE a.id_Persona=p.id_Persona AND r.id_Alumno=a.id_Alumno AND r.id_actividad_deportiva = d.id_actividad_deportiva";
+        $sql1="SELECT r.id_lista_registro, d.nombre, r.fecha_registro,a.Num_Control as 'Número de Control', CONCAT(p.Nombre,' ', p.Ap_Pataterno,' ',p.Ap_Materno) as Alumno FROM fa_lista_registro_alumno r, fa_actividad_deportiva d, fh_persona p, fh_alumno a WHERE a.id_Persona=p.id_Persona AND r.id_Alumno=a.id_Alumno AND r.id_actividad_deportiva = d.id_actividad_deportiva";
         $provider=new SqlDataProvider([
             'sql'=>$sql1,
             'key' => 'id_lista_registro',
@@ -77,7 +77,7 @@ class ListaRegistroController extends Controller
      */
     public function actionCreate()
     {
-        $model = new FaListaRegistro();
+        $model = new FaListaRegistroAlumno();
         if ($model->load(Yii::$app->request->post())) {
             $query = (new \yii\db\Query())
                 ->select('id_Alumno')

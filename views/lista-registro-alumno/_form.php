@@ -42,4 +42,4 @@ use app\models\FhAlumno;
     <?php ActiveForm::end(); ?>
 
 </div>
-<?php var_dump($model['id_Alumno']); ?>
+

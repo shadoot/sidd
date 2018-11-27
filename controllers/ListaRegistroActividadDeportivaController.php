@@ -3,18 +3,18 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\FaActividadDeportiva;
+use app\models\FaListaRegistroActividadDeportiva;
 use app\models\FhEntrenador;
-use app\models\FhPersona;
+use app\models\FaActividadDeportiva;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ActividadDeportivaController implements the CRUD actions for FaActividadDeportiva model.
+ * ListaRegistroActividadDeportivaController implements the CRUD actions for FaListaRegistroActividadDeportiva model.
  */
-class ActividadDeportivaController extends Controller
+class ListaRegistroActividadDeportivaController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,13 +32,13 @@ class ActividadDeportivaController extends Controller
     }
 
     /**
-     * Lists all FaActividadDeportiva models.
+     * Lists all FaListaRegistroActividadDeportiva models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => FaActividadDeportiva::find(),
+            'query' => FaListaRegistroActividadDeportiva::find(),
         ]);
 
         return $this->render('index', [
@@ -47,7 +47,7 @@ class ActividadDeportivaController extends Controller
     }
 
     /**
-     * Displays a single FaActividadDeportiva model.
+     * Displays a single FaListaRegistroActividadDeportiva model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -60,15 +60,15 @@ class ActividadDeportivaController extends Controller
     }
 
     /**
-     * Creates a new FaActividadDeportiva model.
+     * Creates a new FaListaRegistroActividadDeportiva model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate(/*$id_entrenador=null*/)
+    public function actionCreate()
     {
+        $rad = new FaListaRegistroActividadDeportiva();
+        $entrenador = new FhEntrenador();
         $actividad = new FaActividadDeportiva();
-        /*$entrenador = new FhEntrenador();
-        $persona = new FhPersona();
 
         $personaTemporal = new \yii\base\DynamicModel([
             'id_temporal',
@@ -78,70 +78,51 @@ class ActividadDeportivaController extends Controller
             ->addRule(['id_temporal'],'integer')
             ->addRule('nombre', 'string',['max'=>107]);
         //if($personaTemporal->hasErrors()){ validation fails  }else{ validation succeeds}
-
-
         if ($personaTemporal->load(Yii::$app->request->post())) {
-                $persona = FhPersona::findOne($personaTemporal->id_temporal);
-                $entrenador=FhEntrenador::findOne(
-                    FhEntrenador::getIdEntrenador($persona->id_Persona));
-                //var_dump($entrenador);
-                //echo "<br><br><br>";
-                //exit();
-                if ($actividad->load(Yii::$app->request->post())) {
-                    $actividad->id_entrenador=$entrenador->id_entrenador;
-                    //var_dump($actividad->id_entrenador);
-                    //exit();
-                    if($actividad->save()){
-                        return $this->redirect(['view', 'id' => $actividad->id_actividad_deportiva]);
-                    }
+            //$personaTemporal->load(Yii::$app->request->post());
+            $entrenador = FhEntrenador::findOne($personaTemporal->id_temporal);
+            if ($rad->load(Yii::$app->request->post())) {
+                $rad->id_entrenador = $entrenador->id_entrenador;
+                if ($rad->save()) {
+                    return $this->redirect(['view', 'id' => $rad->id_lista_registro_actividad_deportiva]);
                 }
-                
-            }    
-
-        if (isset($id_entrenador)) {
-            $entrenador=FhEntrenador::findOne($id_entrenador);
-            //$persona=$entrenador->getPersona();
-            $persona=FhPersona::findOne($entrenador->id_persona);
-            
-            $personaTemporal->nombre=$persona->Nombre.' '.$persona->Ap_Pataterno.
-                ' '.$persona->Ap_Materno;
-            $personaTemporal->id_temporal=$persona->id_Persona;    
-        }*/
-
-        if ($actividad->load(Yii::$app->request->post()) && $actividad->save() ) {
-            return $this->redirect(['view', 'id' => $actividad->id_actividad_deportiva]);
+            }
         }
 
+        /*if ($rad->load(Yii::$app->request->post()) && $rad->save()) {
+            return $this->redirect(['view', 'id' => $rad->id_lista_registro_actividad_deportiva]);
+        }*/
+
         return $this->render('create', [
+            'rad' => $rad,
+            'entrenador' => $entrenador,
             'actividad' => $actividad,
-            /*'entrenador' => $entrenador,
-            'persona' => $persona,
-            'personaTemporal' => $personaTemporal,*/
+            'personaTemporal' => $personaTemporal,
         ]);
     }
 
     /**
-     * Updates an existing FaActividadDeportiva model actividad.
+     * Updates an existing FaListaRegistroActividadDeportiva model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the actividad cannot be found
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
     {
-        $actividad = $this->findModel($id);
+        $model = $this->findModel($id);
 
-        if ($actividad->load(Yii::$app->request->post()) && $actividad->save()) {
-            return $this->redirect(['view', 'id' => $actividad->id_actividad_deportiva]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id_lista_registro_actividad_deportiva]);
         }
 
         return $this->render('update', [
-            'actividad' => $actividad,
+            'model' => $model,
         ]);
     }
 
     /**
-     * Deletes an existing FaActividadDeportiva model.
+     * Deletes an existing FaListaRegistroActividadDeportiva model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -155,15 +136,15 @@ class ActividadDeportivaController extends Controller
     }
 
     /**
-     * Finds the FaActividadDeportiva model based on its primary key value.
+     * Finds the FaListaRegistroActividadDeportiva model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return FaActividadDeportiva the loaded model
+     * @return FaListaRegistroActividadDeportiva the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = FaActividadDeportiva::findOne($id)) !== null) {
+        if (($model = FaListaRegistroActividadDeportiva::findOne($id)) !== null) {
             return $model;
         }
 

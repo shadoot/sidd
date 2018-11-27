@@ -40,10 +40,14 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Casa', 'url' => ['/site/index']],
             ['label' => 'Actividades', 'url' => ['/site/about'], 'items'=>[
-                ['label'=>'Lista de registro de actividades', 'url'=>['/lista-registro/index']],
-                ['label'=>'Lista Entrenadores', 'url'=>['/entrenador/index']],
+                ['label'=>'Registro de Actividades Deportivas', 'url'=>['/lista-registro-actividad-deportiva/index']],
+                ['label'=>'Lista de Entrenadores', 'url'=>['/entrenador/index']],
                 ['label'=>'Lista de Actividades Deportivas', 'url'=>['/actividad-deportiva/index']],
             ]],
+            ['label' => 'Alumnos', 'url' => ['/lista-registro-alumno/index'],'items' => [
+                ['label' => 'Registro Alumnos', 'url' => ['/lista-registro-alumno/index']],
+            ]],
+            ['label' => 'Agenda', 'url' => ['/evento/calendar']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
