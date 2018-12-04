@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\FhPersona;
-use yii\web\JsExpression; 
+//use yii\web\JsExpression; 
 use yii\web\View;
 
 /* @var $this yii\web\View */

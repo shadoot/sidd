@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
 			       			$('#dynamicmodel-id_temporal').val(ui.item.id_entrenador);
 			       			$('#dynamicmodel-nombre').text(ui.item.label);
 			       			//$('#dynamicmodel-id_temporal').focus();
-    						console.log(ui);
+    						//console.log(ui);
 			      		}"),
     		
     	],

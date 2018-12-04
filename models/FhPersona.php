@@ -67,4 +67,8 @@ class FhPersona extends \yii\db\ActiveRecord
         return $this->hasMany(FaActividadDeportiva::className(), ['id_Persona' => 'id_Persona']);
     }
 
+    public function getNombreCompleto(){
+        return $this->Nombre.' '.$this->Ap_Pataterno.' '.$this->Ap_Materno;
+    }
+
 }

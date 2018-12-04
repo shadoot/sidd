@@ -32,10 +32,10 @@ class FaListaRegistroAlumno extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_Alumno', 'id_actividad_deportiva'], 'integer'],
+            [['id_Alumno', 'id_lista_registro_actividad_deportiva'], 'integer'],
             [['fecha_registro'], 'safe'],
             [['id_Alumno'], 'exist', 'skipOnError' => true, 'targetClass' => FhAlumno::className(), 'targetAttribute' => ['id_Alumno' => 'id_Alumno']],
-            [['id_actividad_deportiva'], 'exist', 'skipOnError' => true, 'targetClass' => FaActividadDeportiva::className(), 'targetAttribute' => ['id_actividad_deportiva' => 'id_actividad_deportiva']],
+            [['id_lista_registro_actividad_deportiva'], 'exist', 'skipOnError' => true, 'targetClass' => FaListaRegistroActividadDeportiva::className(), 'targetAttribute' => ['id_lista_registro_actividad_deportiva' => 'id_lista_registro_actividad_deportiva']],
             [['id_Alumno'],'required'],
         ];
     }
@@ -48,7 +48,7 @@ class FaListaRegistroAlumno extends \yii\db\ActiveRecord
         return [
             'id_lista_registro' => 'Id Lista Registro',
             'id_Alumno' => 'Alumno',
-            'id_actividad_deportiva' => 'Actividad Deportiva',
+            'id_lista_registro_actividad_deportiva' => 'Actividad Deportiva',
             'fecha_registro' => 'Fecha Registro',
         ];
     }
@@ -72,8 +72,23 @@ class FaListaRegistroAlumno extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getActividadDeportiva()
+    public function getListaRegistroActividadDeportiva()
     {
-        return $this->hasOne(FaActividadDeportiva::className(), ['id_actividad_deportiva' => 'id_actividad_deportiva']);
+        return $this->hasOne(FaListaRegistroActividadDeportiva::className(), ['id_lista_registro_actividad_deportiva' => 'id_lista_registro_actividad_deportiva']);
+    }
+
+    public function getActividadDeportivaEnCurso()
+    {
+         $query = (new \yii\db\Query())
+            ->select(['id_lista_registro_actividad_deportiva id_lrad',
+                    'nombre'])
+            ->from('fa_lista_registro_actividad_deportiva r')
+            ->innerjoin('fa_actividad_deportiva a',
+                'r.id_actividad_deportiva=a.id_actividad_deportiva')
+            ->where('r.en_curso=:curso');
+            $query->addParams([':curso' => 1]);
+        $command = $query->createCommand();
+        $row = $command->queryAll();
+        return $row;
     }
 }

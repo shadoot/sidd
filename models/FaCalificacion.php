@@ -30,7 +30,7 @@ class FaCalificacion extends \yii\db\ActiveRecord
     {
         return [
             [['calificacion', 'id_lista_registro'], 'integer'],
-            [['id_lista_registro'], 'exist', 'skipOnError' => true, 'targetClass' => FaListaRegistro::className(), 'targetAttribute' => ['id_lista_registro' => 'id_lista_registro']],
+            [['id_lista_registro'], 'exist', 'skipOnError' => true, 'targetClass' => FaListaRegistroAlumno::className(), 'targetAttribute' => ['id_lista_registro' => 'id_lista_registro']],
         ];
     }
 

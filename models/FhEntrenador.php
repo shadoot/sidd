@@ -28,8 +28,8 @@ class FhEntrenador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_persona'], 'required'],
-            [['id_persona'], 'integer'],
+            [['id_persona','id_tipo_entrenador','estado'], 'required'],
+            [['id_persona','id_tipo_entrenador'], 'integer'],
             [['id_persona'], 'unique'],
             [['id_persona'], 'exist', 'skipOnError' => true, 'targetClass' => FhPersona::className(), 'targetAttribute' => ['id_persona' => 'id_Persona']],
         ];
@@ -43,6 +43,9 @@ class FhEntrenador extends \yii\db\ActiveRecord
         return [
             'id_entrenador' => 'Id Entrenador',
             'id_persona' => 'Id Persona',
+            'id_tipo_entrenador' => 'Tipo Entrenador',
+            'estado' => 'Estado',
+
         ];
     }
 
@@ -97,7 +100,8 @@ class FhEntrenador extends \yii\db\ActiveRecord
             ->select(["CONCAT(Nombre,' ',Ap_Pataterno,' ',Ap_Materno) as nombre"])
             ->from('fh_persona p')
             ->innerjoin('fh_entrenador e','p.id_Persona=e.id_persona')
-            ->where('e.id_entrenador=:id_entrenador');
+            ->where('e.id_entrenador=:id_entrenador')
+            ->limit('1');
         $query->addParams([':id_entrenador' => $id]);
         $command = $query->createCommand();
         $row = $command->queryAll();

@@ -110,14 +110,53 @@ class ListaRegistroActividadDeportivaController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $rad = new FaListaRegistroActividadDeportiva();
+        $entrenador = new FhEntrenador();
+        $actividad = new FaActividadDeportiva();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_lista_registro_actividad_deportiva]);
+        $rad=FaListaRegistroActividadDeportiva::findOne($id);
+        $entrenador=FhEntrenador::findOne($rad->id_entrenador);
+        $actividad=FaActividadDeportiva::findOne($rad->id_actividad_deportiva);
+         
+        $personaTemporal = new \yii\base\DynamicModel([
+            'id_temporal',
+            'nombre',
+        ]);
+        $personaTemporal->addRule(['nombre'], 'required')
+            ->addRule(['id_temporal'],'integer')
+            ->addRule('nombre', 'string',['max'=>107]);
+        $personaTemporal->load(Yii::$app->request->post());    
+        if ($personaTemporal->nombre==null && is_object($entrenador)) {
+                $personaTemporal->nombre=
+                FhEntrenador::getNombreCompleto($entrenador->id_entrenador);
+                $personaTemporal->id_temporal=$entrenador->id_entrenador;
+                
+           }   
+        //if($personaTemporal->hasErrors()){ validation fails  }else{ validation succeeds}
+        if ($personaTemporal->load(Yii::$app->request->post())) {
+            //$personaTemporal->load(Yii::$app->request->post());
+            if($entrenador->id_entrenador==null)
+            {
+                $entrenador = FhEntrenador::findOne($personaTemporal->id_temporal);
+            }
+            
+            if ($rad->load(Yii::$app->request->post())) {
+                $rad->id_entrenador = $entrenador->id_entrenador;
+                if ($rad->save()) {
+                    return $this->redirect(['view', 'id' => $rad->id_lista_registro_actividad_deportiva]);
+                }
+            }
         }
 
+        /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id_lista_registro_actividad_deportiva]);
+        }*/
+
         return $this->render('update', [
-            'model' => $model,
+            'rad' => $rad,
+            'entrenador' => $entrenador,
+            'actividad' => $actividad,
+            'personaTemporal' => $personaTemporal,
         ]);
     }
 

@@ -32,8 +32,8 @@ class FaEvento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_Evento'], 'required'],
-            [['id_Evento'], 'integer'],
+            //[['id_Evento'], 'required'],
+            //[['id_Evento'], 'integer'],
             [['Fecha', 'Hr_Evento'], 'safe'],
             [['Nombre', 'Lugar'], 'string', 'max' => 45],
             [['Descripcion'], 'string', 'max' => 70],

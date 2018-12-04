@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\FaActividadDeportiva */
 
-$this->title = $model->id_actividad_deportiva;
+$this->title = $model->nombre.' : '.$model->rama;
 $this->params['breadcrumbs'][] = ['label' => 'Lista de Actividades Deportivas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

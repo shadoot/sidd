@@ -22,10 +22,30 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             
-            'nombre',
+            //'id_lista_registro',
+            [
+                'label' => 'Número de Control',
+                'value' => 'alumno.Num_Control',
+            ],
+            //'id_Alumno',
+            [
+                'label' => 'Nombre Completo',
+                'value' => 'alumno.persona.NombreCompleto',
+            ],
+            [
+                'label' => 'Carrera',
+                'value' => 'alumno.carrera.Nombre',
+            ],
+            //'id_lista_registro_actividad_deportiva',
+            [
+                'label' => 'Actividad Deportiva',
+                'value' => 'listaRegistroActividadDeportiva.actividadDeportiva.nombre',
+            ],
+            //'nombre',
             'fecha_registro',
-            'Número de Control',
-            'Alumno',
+            //'Número de Control',
+            //'Alumno',
+            
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

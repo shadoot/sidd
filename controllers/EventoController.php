@@ -70,6 +70,8 @@ class EventoController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            //var_dump($model->Hr_Evento);
+            //exit();
             return $this->redirect(['calendar']);
         }
         if (isset($date)) {

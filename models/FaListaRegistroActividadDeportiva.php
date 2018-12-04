@@ -47,7 +47,7 @@ class FaListaRegistroActividadDeportiva extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_lista_registro_actividad_deportiva' => 'Id Lista Registro Actividad Deportiva',
+            'id_lista_registro_actividad_deportiva' => 'Lista Registro Actividad Deportiva',
             'id_entrenador' => 'Id Entrenador',
             'id_actividad_deportiva' => 'Id Actividad Deportiva',
             'fecha' => 'Fecha',
@@ -69,7 +69,7 @@ class FaListaRegistroActividadDeportiva extends \yii\db\ActiveRecord
      */
     public function getActividadDeportiva()
     {
-        return $this->hasOne(FaActividadDeportiva::className(), ['id_actividad_deportiva' => 'id_actividad_deportiva'])->inverseOf('faListaRegistroActividadDeportivas');
+        return $this->hasOne(FaActividadDeportiva::className(), ['id_actividad_deportiva' => 'id_actividad_deportiva']);
     }
 
     /**

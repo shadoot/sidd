@@ -37,22 +37,22 @@ class ListaRegistroAlumnoController extends Controller
      */
     public function actionIndex()
     {
-        /*$dataProvider = new ActiveDataProvider([
-            'query' => FaListaRegistro::find()->getAlumno(),
-        ]);*/
+        $dataProvider = new ActiveDataProvider([
+            'query' => FaListaRegistroAlumno::find(),
+        ]);
         /*$sql1="SELECT d.nombre, fecha_registro,Num_Control, CONCAT(p.Nombre,' ', p.Ap_Pataterno,' ', p.Ap_Materno) FROM fa_lista_registro r, fa_actividad_deportiva d, fh_alumno a, fh_persona p WHERE r.id_actividad_deportiva=d.id_actividad_deportiva AND r.id_Alumno=a.id_Alumno AND a.id_Persona=p.id_Persona;";
         $provider=new SqlDataProvider([
             'sql'=>$sql1,
         ]);*/
 
-        $sql1="SELECT r.id_lista_registro, d.nombre, r.fecha_registro,a.Num_Control as 'Número de Control', CONCAT(p.Nombre,' ', p.Ap_Pataterno,' ',p.Ap_Materno) as Alumno FROM fa_lista_registro_alumno r, fa_actividad_deportiva d, fh_persona p, fh_alumno a WHERE a.id_Persona=p.id_Persona AND r.id_Alumno=a.id_Alumno AND r.id_actividad_deportiva = d.id_actividad_deportiva";
+        /*$sql1="SELECT r.id_lista_registro, d.nombre, r.fecha_registro,a.Num_Control as 'Número de Control', CONCAT(p.Nombre,' ', p.Ap_Pataterno,' ',p.Ap_Materno) as Alumno FROM fa_lista_registro_alumno r, fa_actividad_deportiva d, fh_persona p, fh_alumno a WHERE a.id_Persona=p.id_Persona AND r.id_Alumno=a.id_Alumno AND r.id_actividad_deportiva = d.id_actividad_deportiva";
         $provider=new SqlDataProvider([
             'sql'=>$sql1,
             'key' => 'id_lista_registro',
-        ]);
+        ]);*/
 
         return $this->render('index', [
-            'dataProvider' => $provider,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -78,6 +78,18 @@ class ListaRegistroAlumnoController extends Controller
     public function actionCreate()
     {
         $model = new FaListaRegistroAlumno();
+
+        $alumnoTemporal = new \yii\base\DynamicModel([
+            'id_alumno_temp',
+            'nombre_temp',
+            'numero_control',
+            'carrera',
+        ]);
+        $alumnoTemporal->addRule(
+            ['nombre_temp','numero_control','carrera'], 'required')
+            ->addRule(['id_alumno_temp'],'integer')
+            ->addRule('nombre', 'string',['max'=>107]);
+
         if ($model->load(Yii::$app->request->post())) {
             $query = (new \yii\db\Query())
                 ->select('id_Alumno')
@@ -94,6 +106,7 @@ class ListaRegistroAlumnoController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'alumnoTemporal' => $alumnoTemporal,
         ]);
     }
 
@@ -140,7 +153,7 @@ class ListaRegistroAlumnoController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = FaListaRegistro::findOne($id)) !== null) {
+        if (($model = FaListaRegistroAlumno::findOne($id)) !== null) {
             return $model;
         }
 

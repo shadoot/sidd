@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\FaListaRegistro */
+/* @var $model app\models\FaListaRegistroAlumno */
 
 $this->title = $model->id_lista_registro;
 $this->params['breadcrumbs'][] = ['label' => 'Lista Registros', 'url' => ['index']];
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_lista_registro',
             'id_Alumno',
-            'id_actividad_deportiva',
+            'id_lista_registro_actividad_deportiva',
             'fecha_registro',
         ],
     ]) ?>

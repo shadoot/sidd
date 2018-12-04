@@ -42,7 +42,8 @@ class EntrenadorController extends Controller
         ,Tel_Movil as Celular,e_mail as 'Correo Electrónico'
         FROM fh_entrenador e 
         INNER JOIN fh_persona p ON e.id_persona=p.id_Persona 
-        INNER JOIN fh_contacto c ON p.id_Persona=c.id_Persona";
+        INNER JOIN fh_contacto c ON p.id_Persona=c.id_Persona
+        ";
         $provider=new SqlDataProvider([
             'sql' => $sql,
             'key' => 'id_entrenador',
@@ -87,11 +88,15 @@ class EntrenadorController extends Controller
             
             if ($persona->save()) {
                 $contacto->id_Persona=$persona->id_Persona;
+
                 if($contacto->save()){
                     $entrenador->id_persona=$persona->id_Persona;
+                    $entrenador->id_tipo_entrenador=1; // ("-_-)
+                    $entrenador->estado=1;              // ("-_-)
                     if ($entrenador->save()) {
                         return $this->redirect(['view', 'id' => $entrenador->id_entrenador]);
                     }
+                    
                 }
             }            
         }
