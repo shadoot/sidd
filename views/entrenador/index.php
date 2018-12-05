@@ -29,7 +29,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => $provider,
             ],*/
             'Correo Electrónico',
-
+            [
+                'attribute' => 'estado',
+                'label' => 'Estado',
+                'value' => function($data)
+                {
+                    //var_dump($data);
+                    //exit();
+                    return ($data['estado']=='1') ? 'Activo' : 'Inactivo' ;
+                },
+            ],
+            [
+                'attribute' => 'tipo',
+                'label' => 'Tipo de Entrenador',
+                'value' => 'tipo',
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

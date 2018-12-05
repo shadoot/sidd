@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use app\models\FhTipoEntrenador;
 
 /* @var $this yii\web\View */
 /* @var $entrenador app\models\FhEntrenador */
@@ -43,6 +45,12 @@ use yii\widgets\ActiveForm;
 
     <?=	$form->field($contacto,'e_mail')->textInput() ?>
 
+    <?php $tipo=ArrayHelper::map(FhTipoEntrenador::find()->all(),'id_tipo_entrenador', 'tipo'); ?>
+    <?php echo $form->field($entrenador,'id_tipo_entrenador')->dropDownList(
+            $tipo)->label('Tipo de Entrenador'); ?>
+
+    <?= $form->field($entrenador,'estado')->checkbox(['label' => 'Activo']) ?>
+
     <div class="form-group">
         <?= Html::submitButton('Registrar', ['class' => 'btn btn-success']) ?>
     </div>
@@ -50,3 +58,4 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php //("-_-) Actualizar los modelos de fhentrenador y falistaregistroactividaddeportiva?>

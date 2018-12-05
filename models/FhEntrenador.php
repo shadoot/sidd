@@ -76,7 +76,8 @@ class FhEntrenador extends \yii\db\ActiveRecord
             ->select(["CONCAT(Nombre,' ',Ap_Pataterno,' ',Ap_Materno) as nombre",'e.id_entrenador'])
             //->select('p.id_Persona')
             ->from('fh_persona p')
-            ->innerjoin('fh_entrenador e','p.id_Persona=e.id_persona');
+            ->innerjoin('fh_entrenador e','p.id_Persona=e.id_persona')
+            ->where('e.estado=1');
         //  Crear un comando. Se puede obtener la consulta SQL actual utilizando $command->sql
         $command = $query->createCommand();
 

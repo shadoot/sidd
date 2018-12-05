@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\FaListaAsistencia;
-use yii\data\ActiveDataProvider;
+use yii\data\SqlDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
  */
 class ListaAsistenciaController extends Controller
 {
+    
     /**
      * {@inheritdoc}
      */
@@ -33,14 +34,30 @@ class ListaAsistenciaController extends Controller
      * Lists all FaListaAsistencia models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id_actividad)
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => FaListaAsistencia::find(),
+
+        $query = (new \yii\db\Query())
+                ->select(['id_lista_registro',
+                    "CONCAT(p.Nombre,' ',p.Ap_Pataterno,' ',p.Ap_Materno) as nombre"])
+                ->from('fa_lista_registro_alumno lra')
+                ->innerjoin('fa_lista_registro_actividad_deportiva lrad',
+                    'lra.id_lista_registro_actividad_deportiva=lrad.id_lista_registro_actividad_deportiva')
+                ->innerjoin('fh_alumno a','lra.id_Alumno=a.id_Alumno')
+                ->innerjoin('fh_persona p','a.id_Persona=p.id_Persona')
+                ->where('lrad.id_lista_registro_actividad_deportiva='.$id_actividad);
+        //$query->addParams([':id_lrad' => $id_actividad]); //no blindea los parametros
+        $command = $query->createCommand();
+            //$row = $command->queryAll();
+        //var_dump($command->sql);
+        //exit();
+        $provider=new SqlDataProvider([
+            'sql'=>$command->sql,
+            'key' => 'id_lista_registro',
         ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'dataProvider' => $provider,
         ]);
     }
 
@@ -62,9 +79,9 @@ class ListaAsistenciaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id_actividad)
     {
-        $model = new FaListaAsistencia();
+        /*$model = new FaListaAsistencia();
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id_lista]);
@@ -72,6 +89,28 @@ class ListaAsistenciaController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+        ]);*/
+        $query = (new \yii\db\Query())
+                ->select(['id_lista_registro',
+                    "CONCAT(p.Nombre,' ',p.Ap_Pataterno,' ',p.Ap_Materno) as nombre"])
+                ->from('fa_lista_registro_alumno lra')
+                ->innerjoin('fa_lista_registro_actividad_deportiva lrad',
+                    'lra.id_lista_registro_actividad_deportiva=lrad.id_lista_registro_actividad_deportiva')
+                ->innerjoin('fh_alumno a','lra.id_Alumno=a.id_Alumno')
+                ->innerjoin('fh_persona p','a.id_Persona=p.id_Persona')
+                ->where('lrad.id_lista_registro_actividad_deportiva='.$id_actividad);
+        //$query->addParams([':id_lrad' => $id_actividad]); //no blindea los parametros
+        $command = $query->createCommand();
+            //$row = $command->queryAll();
+        //var_dump($command->sql);
+        //exit();
+        $provider=new SqlDataProvider([
+            'sql'=>$command->sql,
+            'key' => 'id_lista_registro',
+        ]);
+
+        return $this->render('create', [
+            'dataProvider' => $provider,
         ]);
     }
 

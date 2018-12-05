@@ -121,12 +121,24 @@ class ListaRegistroAlumnoController extends Controller
     {
         $model = $this->findModel($id);
 
+        $alumnoTemporal = new \yii\base\DynamicModel([
+            'id_alumno_temp',
+            'nombre_temp',
+            'numero_control',
+            'carrera',
+        ]);
+        $alumnoTemporal->addRule(
+            ['nombre_temp','numero_control','carrera'], 'required')
+            ->addRule(['id_alumno_temp'],'integer')
+            ->addRule('nombre', 'string',['max'=>107]);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id_lista_registro]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'alumnoTemporal' => $alumnoTemporal,
         ]);
     }
 

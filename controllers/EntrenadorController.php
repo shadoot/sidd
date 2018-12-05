@@ -44,8 +44,19 @@ class EntrenadorController extends Controller
         INNER JOIN fh_persona p ON e.id_persona=p.id_Persona 
         INNER JOIN fh_contacto c ON p.id_Persona=c.id_Persona
         ";
+        $query = (new \yii\db\Query())
+            ->select(['id_entrenador','p.id_Persona',
+                "CONCAT(Nombre,' ',Ap_Pataterno,' ',Ap_Materno) AS 'Nombre Completo'",
+                'Tel_Movil AS Celular','(e_mail) as "Correo Electrónico"',//(-_-) porque lo acepto solo con ()
+                'e.estado','t.tipo'])
+            ->from('fh_entrenador e')
+            ->innerjoin('fh_persona p','e.id_persona = p.id_Persona')
+            ->innerjoin('fh_contacto c','p.id_Persona = c.id_Persona')
+            ->innerjoin('fh_tipo_entrenador t','t.id_tipo_entrenador = e.id_tipo_entrenador');
+        $command = $query->createCommand();
+
         $provider=new SqlDataProvider([
-            'sql' => $sql,
+            'sql' => $command->sql,
             'key' => 'id_entrenador',
         ]);
 
@@ -90,9 +101,9 @@ class EntrenadorController extends Controller
                 $contacto->id_Persona=$persona->id_Persona;
 
                 if($contacto->save()){
+                    $entrenador->load(Yii::$app->request->post());
                     $entrenador->id_persona=$persona->id_Persona;
-                    $entrenador->id_tipo_entrenador=1; // ("-_-)
-                    $entrenador->estado=1;              // ("-_-)
+                    
                     if ($entrenador->save()) {
                         return $this->redirect(['view', 'id' => $entrenador->id_entrenador]);
                     }
@@ -107,6 +118,7 @@ class EntrenadorController extends Controller
             if ($persona->save()) {
                     $contacto->id_Persona=$persona->id_Persona;
                     if($contacto->save()){
+                        $entrenador->load(Yii::$app->request->post());
                         $entrenador->id_persona=$persona->id_Persona;
                         if ($entrenador->save()) {
                             return $this->redirect(
@@ -150,6 +162,7 @@ class EntrenadorController extends Controller
             if ($persona->save()) {
                 $contacto->id_Persona=$persona->id_Persona;
                 if($contacto->save()){
+                    $entrenador->load(Yii::$app->request->post());
                     $entrenador->id_persona=$persona->id_Persona;
                     if ($entrenador->save()) {
                         return $this->redirect(['view', 'id' => $entrenador->id_entrenador]);

@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Estado',
                 'value' => function($data)
                 {
-                    return ($data->estado=='1') ? 'Vigente' : 'Cancelado' ;;
+                    return ($data->estado=='1') ? 'Vigente' : 'Cancelado' ;
                 },
             ],
             //'id_entrenador',

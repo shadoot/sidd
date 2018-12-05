@@ -9,7 +9,7 @@ use yii\data\ArrayDataProvider;
 /* @var $model app\models\FaListaAsistencia */
 /* @var $form yii\widgets\ActiveForm */
 
-$array=[['id' => '11', 'name' => 'juan', '12-4' => ''],
+/*$array=[['id' => '11', 'name' => 'juan', '12-4' => ''],
 		['id' => '3', 'name' => 'eduardo', '12-4' => ''],
 		['id' => '8', 'name' => 'ana', '12-4' => ''],
 		['id' => '1', 'name' => 'martin', '12-4' => ''],
@@ -22,22 +22,22 @@ $provider = new ArrayDataProvider([
     'pagination' => [
         'pageSize' => 10,
     ],
-]);
+]);*/
 ?>
 
 <div class="fa-lista-asistencia-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id_Alumno')->textInput() ?>
+    <?php //$form->field($model, 'id_Alumno')->textInput() ?>
 
-    <?= $form->field($model, 'id_actividad_deportiva')->textInput() ?>
+    <?php //$form->field($model, 'id_actividad_deportiva')->textInput() ?>
 
-    <?= $form->field($model, 'dia')->textInput() ?>
+    <?php //$form->field($model, 'dia')->textInput() ?>
 
-    <?= $form->field($model, 'asistencia')->checkbox() ?>
+    <?php //$form->field($model, 'asistencia')->checkbox() ?>
 
-    <?= GridView::widget([
+    <?php /*GridView::widget([
         'dataProvider' => $provider,
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
@@ -91,6 +91,15 @@ $provider = new ArrayDataProvider([
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
+    ]); */ ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            //'id_lista_registro',
+            'nombre', 
+                    
+            ],
     ]); ?>
 
     <div class="form-group">

@@ -125,6 +125,7 @@ class ListaRegistroActividadDeportivaController extends Controller
         $personaTemporal->addRule(['nombre'], 'required')
             ->addRule(['id_temporal'],'integer')
             ->addRule('nombre', 'string',['max'=>107]);
+            
         $personaTemporal->load(Yii::$app->request->post());    
         if ($personaTemporal->nombre==null && is_object($entrenador)) {
                 $personaTemporal->nombre=
