@@ -57,6 +57,12 @@ $config = [
     'params' => $params,
 ];
 
+$config['modules']=[
+   'gridview' =>  [
+        'class' => '\kartik\grid\Module'
+    ]
+];
+
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';

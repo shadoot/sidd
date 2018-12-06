@@ -109,6 +109,21 @@ class ListaAsistenciaController extends Controller
             'key' => 'id_lista_registro',
         ]);
 
+        if(Yii::$app->request->post())
+        {
+            //var_dump($_POST);
+            //$params=Yii::$app->request->bodyParams;
+            /*foreach ($params as $key => $param) {
+                //echo $param."<br>";
+                foreach ($param as $key => $value) {
+                    echo $key.'<br>';
+                }
+                
+            }*/
+            
+            //exit();
+        }
+
         return $this->render('create', [
             'dataProvider' => $provider,
         ]);
