@@ -12,16 +12,18 @@ $monthNombre=['1'=>'Enero','2'=>'Febrero','3'=>'Marzo','4'=>'Abril',
 	'5' => 'Mayo', '6' => 'Junio', '7'=>'Julio', '8' => 'Agosto',
 	'9'=>'Septiembre', '10'=>'Octubre','11'=>'Noviembre','12'=>'Diciembre'];
 $attr;
-$month=date("n")-2;
+$month=date("n")-1;
 $year=date("Y");
 $diaActual=date("j");
 
-echo $month;
+//echo $month;
 
 $diaSemana=date("w",mktime(0,0,0,$month,1,$year));
 $ultimoDiaMes=date("d",(mktime(0,0,0,$month+1,1,$year)-1));
 echo $diaSemanaNombre[$diaSemana].'<br>';
 echo $ultimoDiaMes.'<br>';
+
+echo '<i class="fa fa-hand-grab-o" style="font-size:24px"></i>';
 
 $diaNombre='';
 $diaPrint=0;
@@ -114,3 +116,5 @@ var_dump($attr);
 	 ?>
 
 <?= '</table>' ?>
+
+

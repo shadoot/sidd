@@ -10,12 +10,21 @@ use yii\bootstrap\Modal;
 <?php 
 	Modal::begin([
 			'header'=>'<h3>Registro de Eventos</h3>',
-			'id'=>'modal',
+			'id'=>'modalEvento',
 			'size'=>'modal-lg',
 		]);
-	echo "<div id='modalContent'></div>";
+	echo "<div id='modalContentEvento'></div>";
 	Modal::end();
 		 ?>
+	<?php 
+	Modal::begin([
+			'header'=>'<h3 id="anexo">Agregar Anexo</h3>',
+			'id'=>'modalAnexo',
+			'size'=>'modal-lg',
+		]);
+	echo "<div id='modalContentAnexo'></div>";
+	Modal::end();
+		 ?>	 
 <?= \yii2fullcalendar\yii2fullcalendar::widget(array(
       'events'=> $eventos,
   ));

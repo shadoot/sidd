@@ -22,7 +22,8 @@
         "kartik-v/yii2-widget-timepicker": "dev-master",
         "kartik-v/yii2-mpdf": "dev-master",
         "kartik-v/yii2-builder": "dev-master",
-        "kartik-v/yii2-widget-colorinput": "*"
+        "miloschuman/yii2-highcharts-widget": "*",
+        "kartik-v/yii2-widget-fileinput": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

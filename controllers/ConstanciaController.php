@@ -18,7 +18,7 @@ class ConstanciaController extends Controller
         	'numero' => '182650051'
         ]);
 
-        $header = $this->renderPartial('_constanciaHeader');
+        //$header = $this->renderPartial('_constanciaHeader');
 
         $pdf = new Pdf([
 	        

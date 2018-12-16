@@ -63,4 +63,24 @@ class FaEvento extends \yii\db\ActiveRecord
     {
         return $this->hasMany(FiPrestamoEvento::className(), ['id_evento' => 'id_Evento']);
     }
+
+    public function getEventos()
+    {
+        $query = (new \yii\db\Query())
+            ->select(['e.id_Evento', 'e.Nombre', 'e.Fecha', 'a.id_evento_anexo'])
+            ->from('fa_evento e')
+            ->leftjoin('fa_evento_anexo a','e.id_Evento=a.id_evento')
+            ->groupBy('e.id_Evento');
+        
+        $command = $query->createCommand();
+        $row = $command->queryAll();
+        /*print_r($row);
+        foreach ($row as $value) {
+            if(!is_null($value['id_evento_anexo'])){
+                echo "<br> Es nulo".$value['id_Evento'];
+            }
+        }
+        exit();*/
+        return $row;
+    }
 }

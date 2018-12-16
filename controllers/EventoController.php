@@ -4,16 +4,23 @@ namespace app\controllers;
 
 use Yii;
 use app\models\FaEvento;
+use app\models\FaEventoAnexo;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
+use yii\base\ErrorException;
+use yii\data\ArrayDataProvider;
 
 /**
  * EventoController implements the CRUD actions for FaEvento model.
  */
 class EventoController extends Controller
 {
+    public static $defaultColor='#337ab7';
+    public static $imagenColor='#8976ea';
+    public static $advertenciaColor='#ff0303d9';
     /**
      * {@inheritdoc}
      */
@@ -136,13 +143,33 @@ class EventoController extends Controller
     }
 
     public function actionCalendar(){
-        $lista_eventos=FaEvento::find()->all();
+        date_default_timezone_set('America/Mexico_City');
+        //$lista_eventos=FaEvento::find()->all();
+        $lista_eventos = FaEvento::getEventos();
         $eventos;
+        $hoy=date("Y-m-d"); //$hoy=date("Y-m-d_G:i:s");
+        
         foreach ($lista_eventos as $evento) {
             $event=new \yii2fullcalendar\models\Event();
-            $event->id=$evento->id_Evento;
-            $event->title=$evento->Nombre;
-            $event->start=$evento->Fecha;
+            $event->id=$evento['id_Evento'];
+            $event->title=$evento['Nombre'];
+            $event->start=$evento['Fecha'];
+            $dataExtra=' "data-id="'.$evento['id_Evento'].'"';
+            $event->className=$dataExtra;
+            
+            if(!is_null($evento['id_evento_anexo'])){
+                $event->color=EventoController::$imagenColor;
+                $event->className=$dataExtra.' data-titulo="Visualizar contenido"';
+            }else{
+                $event->color=EventoController::$defaultColor;
+                $event->className=$dataExtra.' data-titulo="Agregar Anexo"';
+            }
+            if ($evento['Fecha']==$hoy) {
+                $event->color=EventoController::$advertenciaColor;
+            }
+
+            
+            //$event->url='index.php?r=evento/'.$evento->id_Evento;
             $eventos[]=$event;
             /*$Event = new \yii2fullcalendar\models\Event();
             $Event->id = 1;
@@ -151,5 +178,112 @@ class EventoController extends Controller
             $eventos[] = $Event;*/
         }
         return $this->render('calendar',['eventos'=>$eventos]);
+    }
+
+    public function actionAnexo($id=null,$id_anexo=null,$n=null)
+    {
+        //print_r($n);
+        //exit();
+        if(isset($id) && !isset($n) || $n=='r'){
+            $model = FaEventoAnexo::findAll(['id_evento' => $id]);
+            if(sizeof($model)>0){
+                if(sizeof($model)==1){
+                    return $this->renderAjax('image_view', [
+                        'model' => $model,
+                    ]);
+                }else{
+                    $provider = new ArrayDataProvider([
+                        'allModels' => $model,
+                        'pagination' => [
+                            'pageSize' => 10,
+                        ],
+                    ]);
+                    return $this->renderAjax('image_view',[
+                        'model' => $provider,
+                    ]);
+                }
+            }
+        }
+
+        $model =new FaEventoAnexo();
+        
+
+        if (Yii::$app->request->post()) {
+
+            $model->load(Yii::$app->request->post());
+            
+            $img = UploadedFile::getInstance($model, 'image');
+            //echo 'busco archivo por modelo';
+
+
+            if (isset($id)) {
+                $model->id_evento=$id;
+            }
+            
+                
+            if (!is_null($img)) {
+                
+                Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/web/img/evento/';
+                $path = Yii::$app->params['uploadPath'] . $img->name;
+                if(file_exists($path)){
+
+                    if(md5_file($path)!=md5_file($img->tempName)){
+                        while(file_exists($path)) {
+                            //echo 'MD5 file hash of ' . $img->name . ' : ' . md5_file($path).' ';
+                            //echo 'MD5 temp file hash of ' . $img->name . ' : ' . md5_file($img->tempName).' ';
+                            $temp=$img->name;
+                            $img->name=Yii::$app->security->generateRandomString().'--'.$temp;
+                            $path=Yii::$app->params['uploadPath']. $img->name;
+                        }
+                    }
+                }
+
+                $img->saveAs($path);
+                $model->imagen=$img->name;
+                
+                if ($model->save()) {
+                    
+                    if(isset($n) && $n=='a'){
+                            $model = FaEventoAnexo::findAll(['id_evento' => $id]);
+                            if(sizeof($model)>0){
+                                if(sizeof($model)==1){
+                                    return $this->renderAjax('image_view', [
+                                        'model' => $model,
+                                    ]);
+                                }else{
+                                    $provider = new ArrayDataProvider([
+                                        'allModels' => $model,
+                                        'pagination' => [
+                                            'pageSize' => 10,
+                                        ],
+                                    ]);
+                                    return $this->renderAjax('image_view',[
+                                        'model' => $provider,
+                                    ]);
+                            }
+                        }
+                    }else{
+                        return $this->redirect(['calendar']);    
+                    }
+                    
+                }
+            }
+            echo "imagen es nula";
+            exit();
+        }
+        if (isset($id) && Yii::$app->request->isAjax) {
+            echo "entra en la validacion ajax";
+            
+            //exit();
+            return $this->renderAjax('_anexo', [
+                'model' => $model,
+                'n' => (isset($n)) ? $id : null,
+            ]);
+        }
+        return $this->render('_anexo',['model' => $model]);
+    }
+
+    public function imagen_view($id=null,$id_anexo=null,$n=null){
+        
     }
 }

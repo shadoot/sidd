@@ -50,7 +50,6 @@ $provider = new ArrayDataProvider([
         //var_dump($attr);
         
 ?>
-
 <div class="fa-lista-asistencia-form">
 
     <?php $form = ActiveForm::begin(); ?>

@@ -10,6 +10,8 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\base\ErrorException;
+use yii\db\IntegrityException;
 
 /**
  * ActividadDeportivaController implements the CRUD actions for FaActividadDeportiva model.
@@ -148,8 +150,14 @@ class ActividadDeportivaController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    {   
+        try {
+
+            $this->findModel($id)->delete();
+            
+        } catch (IntegrityException $e) {
+            Yii::warning("Violación de la restricción de integridad: 1451 No se puede eliminar ni actualizar una fila principal: una restricción de clave externa falla.");
+        }
 
         return $this->redirect(['index']);
     }

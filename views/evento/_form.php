@@ -20,7 +20,7 @@ use kartik\time\TimePicker;
 
     <?= $form->field($model, 'Nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'Fecha')->textInput() ?>
+    <?= $form->field($model, 'Fecha')->textInput(['readonly' => true]) ?>
 
     <?= $form->field($model, 'Lugar')->textInput(['maxlength' => true]) ?>
 
@@ -51,7 +51,7 @@ use kartik\time\TimePicker;
             ]);*/
     ?>
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
