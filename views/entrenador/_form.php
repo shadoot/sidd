@@ -14,13 +14,13 @@ use app\models\FhTipoEntrenador;
 
 <div class="fh-entrenador-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['method' => 'post','enableClientValidation' => true]); ?>
 
     
 
     <?=	$form->field($persona,'Nombre')->textInput() ?>
 
-    <?=	$form->field($persona,'Ap_Pataterno')->textInput() ?>
+    <?=	$form->field($persona,'Ap_Paterno')->textInput() ?>
 
     <?=	$form->field($persona,'Ap_Materno')->textInput() ?>
 

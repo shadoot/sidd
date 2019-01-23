@@ -34,7 +34,7 @@ use yii\helpers\Url;
 
 <?php 
 if(isset($n)){
-    echo "N es real";   
+    //echo "N es real";   
     echo FileInput::widget([
         'model' => $model,
         'attribute' => 'image',
@@ -94,7 +94,7 @@ textarea(["onkeyup" => "contadorCaracteres(this)"])->label('Descripción') ?>
 
 <?php ActiveForm::end(); ?>
 
-<?php print_r($model->errors);
+<?php //print_r($model->errors);
     /*echo FileInput::widget([
         'name' => 'attachment_49[]',
         'options'=>[

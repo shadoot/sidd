@@ -36,8 +36,9 @@ class FaActividadDeportiva extends \yii\db\ActiveRecord
         return [
             [['nombre', 'rama'], 'required'],
             [['estado'], 'boolean'],
-            [['nombre'], 'string', 'max' => 15],
+            [['nombre'], 'string', 'length' => [3, 15]],
             [['rama'], 'string', 'max' => 7],
+            ['nombre','match', 'pattern' => '/^[a-zA-ZñÑ]\w*$/i']
         ];
     }
 

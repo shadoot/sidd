@@ -33,13 +33,14 @@ class FhPersona extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Nombre', 'Ap_Pataterno', 'Ap_Materno', 'Genero', 'ECivil', 'FNacimiento'], 'required'],
+            [['Nombre', 'Ap_Paterno', 'Ap_Materno', 'Genero', 'ECivil', 'FNacimiento'], 'required'],
             [['FNacimiento'], 'safe'],
             [['Nombre'], 'string', 'max' => 45],
             [['Ap_Pataterno', 'Ap_Materno'], 'string', 'max' => 30],
             [['Genero'], 'string', 'max' => 10],
             [['ECivil'], 'string', 'max' => 15],
             [['FNacimiento'],'date', 'format'=>'Y-m-d'],
+            [['Nombre','Ap_Paterno',],'match', 'pattern' => '/^[a-z]\w*$/i','message' => '{attribute} solo acepta letras'],
         ];
     }
 
@@ -51,7 +52,7 @@ class FhPersona extends \yii\db\ActiveRecord
         return [
             'id_Persona' => 'Id  Persona',
             'Nombre' => 'Nombre',
-            'Ap_Pataterno' => 'Apellido Paterno',
+            'Ap_Paterno' => 'Apellido Paterno',
             'Ap_Materno' => 'Apellido Materno',
             'Genero' => 'Genero',
             'ECivil' => 'Estado Civil',

@@ -69,46 +69,6 @@ class ActividadDeportivaController extends Controller
     public function actionCreate(/*$id_entrenador=null*/)
     {
         $actividad = new FaActividadDeportiva();
-        /*$entrenador = new FhEntrenador();
-        $persona = new FhPersona();
-
-        $personaTemporal = new \yii\base\DynamicModel([
-            'id_temporal',
-            'nombre',
-        ]);
-        $personaTemporal->addRule(['nombre'], 'required')
-            ->addRule(['id_temporal'],'integer')
-            ->addRule('nombre', 'string',['max'=>107]);
-        //if($personaTemporal->hasErrors()){ validation fails  }else{ validation succeeds}
-
-
-        if ($personaTemporal->load(Yii::$app->request->post())) {
-                $persona = FhPersona::findOne($personaTemporal->id_temporal);
-                $entrenador=FhEntrenador::findOne(
-                    FhEntrenador::getIdEntrenador($persona->id_Persona));
-                //var_dump($entrenador);
-                //echo "<br><br><br>";
-                //exit();
-                if ($actividad->load(Yii::$app->request->post())) {
-                    $actividad->id_entrenador=$entrenador->id_entrenador;
-                    //var_dump($actividad->id_entrenador);
-                    //exit();
-                    if($actividad->save()){
-                        return $this->redirect(['view', 'id' => $actividad->id_actividad_deportiva]);
-                    }
-                }
-                
-            }    
-
-        if (isset($id_entrenador)) {
-            $entrenador=FhEntrenador::findOne($id_entrenador);
-            //$persona=$entrenador->getPersona();
-            $persona=FhPersona::findOne($entrenador->id_persona);
-            
-            $personaTemporal->nombre=$persona->Nombre.' '.$persona->Ap_Pataterno.
-                ' '.$persona->Ap_Materno;
-            $personaTemporal->id_temporal=$persona->id_Persona;    
-        }*/
 
         if ($actividad->load(Yii::$app->request->post()) && $actividad->save() ) {
             return $this->redirect(['view', 'id' => $actividad->id_actividad_deportiva]);
@@ -116,9 +76,6 @@ class ActividadDeportivaController extends Controller
 
         return $this->render('create', [
             'actividad' => $actividad,
-            /*'entrenador' => $entrenador,
-            'persona' => $persona,
-            'personaTemporal' => $personaTemporal,*/
         ]);
     }
 
@@ -150,13 +107,15 @@ class ActividadDeportivaController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
-    {   
+    {   $session = Yii::$app->session;
         try {
 
             $this->findModel($id)->delete();
-            
+            $session->addFlash('success','Elemento eliminado');
         } catch (IntegrityException $e) {
-            Yii::warning("Violación de la restricción de integridad: 1451 No se puede eliminar ni actualizar una fila principal: una restricción de clave externa falla.");
+            
+            $error="1451 No se puede eliminar el elemento porque esta relacionado con otra tabla";
+            $session->addFlash('error', $error);
         }
 
         return $this->redirect(['index']);

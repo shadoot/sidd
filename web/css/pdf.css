@@ -1,0 +1,17 @@
+.left{
+    align-content: left;
+    align-self: left;
+
+}
+.right{
+    float: right;
+    background:red
+}
+.center{
+    background:green;
+   display:inline-block
+}
+.flota{
+	float:left;
+	width: auto;
+}

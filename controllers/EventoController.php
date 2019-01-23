@@ -12,6 +12,8 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\base\ErrorException;
 use yii\data\ArrayDataProvider;
+use kartik\mpdf\Pdf;
+use yii\data\SqlDataProvider;
 
 /**
  * EventoController implements the CRUD actions for FaEvento model.
@@ -73,6 +75,26 @@ class EventoController extends Controller
     {
         $model = new FaEvento();
         if (isset($date)) {
+            
+            $model = $this->findModels($date);
+            $count=sizeof($model);
+            if($count>0){
+                if($count==1){
+                    return $this->renderAjax('view', [
+                        'model' => $model[0],
+                    ]);
+                }else{
+                    $dataProvider = new ActiveDataProvider([
+                        'query' => FaEvento::find()->where('Fecha=:fecha')
+                            ->addParams([':fecha' => $date]),
+                    ]);
+                    return $this->renderAjax('index', [
+                        'dataProvider' => $dataProvider,
+                    ]);
+                }
+            }else{
+                $model = new FaEvento();
+            }
             $model->Fecha=$date;
         }
 
@@ -140,6 +162,19 @@ class EventoController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function findModels($fecha){
+        /*$query = (new \yii\db\Query())
+            ->select('id_Evento')
+            ->from('fa_evento')
+            ->where('Fecha=:fecha');
+        $query->addParams([':fecha' => $fecha]);
+        $command = $query->createCommand();
+        $row = $command->queryAll();*/
+        $model = FaEvento::find()->where('Fecha=:fecha')
+        ->addParams([':fecha' => $fecha])->all();
+        return $model;
     }
 
     public function actionCalendar(){
@@ -268,11 +303,11 @@ class EventoController extends Controller
                     
                 }
             }
-            echo "imagen es nula";
-            exit();
+            //echo "imagen es nula";
+            //exit();
         }
         if (isset($id) && Yii::$app->request->isAjax) {
-            echo "entra en la validacion ajax";
+            //echo "entra en la validacion ajax";
             
             //exit();
             return $this->renderAjax('_anexo', [
@@ -283,7 +318,62 @@ class EventoController extends Controller
         return $this->render('_anexo',['model' => $model]);
     }
 
-    public function imagen_view($id=null,$id_anexo=null,$n=null){
-        
+    public function actionReporte(){
+
+        /*$query = (new \yii\db\Query())
+            ->select(['a.id_Evento', 'Nombre', 'Fecha', 'Lugar', 'e.Descripcion as "descripcion_evento"', 'Hr_Evento', 'id_evento_anexo', 'imagen', 'a.descripcion as "descripcion_anexo"'])
+            ->from('fa_evento e')
+            ->innerjoin('fa_evento_anexo a','e.id_Evento=a.id_evento')
+            ->where(['between','e.Fecha', ':f1',':f2']);
+
+        //$query->addParams([':f1' => '2018-11-01',':f2' => '2018-11-31']);
+            
+        $command = $query->createCommand();*/
+
+        $count = Yii::$app->db->createCommand('
+            SELECT count(e.id_Evento) from fa_evento e inner join fa_evento_anexo a on e.id_Evento=a.id_evento where Fecha between ":f1" and ":f2"',
+                 [':f1' => '2018-11-01', ':f2' => '2018-11-31'])->queryScalar();
+
+        $provider=new SqlDataProvider([
+            'sql' => "select a.id_Evento, Nombre, Fecha, Lugar, e.Descripcion as 'descripcion_evento', Hr_Evento, id_evento_anexo, imagen, a.descripcion as 'descripcion_anexo'from fa_evento e inner join fa_evento_anexo a on e.id_Evento=a.id_evento where e.Fecha between :f1 and :f2",
+            //'totalCount' => $count,
+            'params' => [':f1' => '2018-08-01',':f2' => '2018-12-31'],
+            'key' => 'id_Evento',
+            'pagination' => [
+                'pageSize' => $count,
+            ],
+        ]);
+
+
+        $content = $this->renderPartial('reporte',['provider' => $provider]);
+        //return $this->render('reporte',['provider' => $provider]);
+        $pdf = new Pdf([
+            
+            'mode' => Pdf::MODE_CORE, 
+            
+            'format' => Pdf::FORMAT_A4, 
+            
+            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            
+            'destination' => Pdf::DEST_BROWSER, 
+            
+            'content' => $content,  
+            
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
+
+            'cssInline' => '.kv-heading-1{font-size:18px}', 
+
+            'options' => ['title' => 'Constancia de actividades deportivas y culturales'],
+            
+            /*'methods' => [ 
+                'SetHeader'=>['header'],
+                'SetFooter' => ['2017, "Un siglo de las constituciones"'],
+            ]*/
+        ]);
+
+
+
+        return $pdf->render();
+        //return $content;
     }
 }

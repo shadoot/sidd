@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\SqlProvider */
 
-$this->title = 'Entrenadores';
+$this->title = 'Lista de entrenadores';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fh-entrenador-index">

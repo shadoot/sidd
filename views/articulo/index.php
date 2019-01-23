@@ -2,6 +2,10 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\controllers\ArticuloController;
+use yii\web\JsExpression; 
+//use yii\base\View;
+use  yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -17,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Registrar Articulo', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php /*  GridView::widget([
+    <?=   GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
@@ -28,14 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); */?>
+    ]); ?>
 </div>
 <?php 
-    $files=['FaEventoAnexo' => ['name' => ['image' => '82.jpg'],
-     'type' => ['image' => 'image/jpeg'], 'tmp_name' => 
-     ['image' => '/opt/lampp/temp/php82P2oA'], 'error'=> ['image' => '0'],
-    'size' => ['image' => '1091984']]];
-
-
-    print_r($files);
+    /*if (isset($error)) {
+        $this->registerJs('alert("'.$error[0].'");', View::POS_READY);
+    }*/
  ?>

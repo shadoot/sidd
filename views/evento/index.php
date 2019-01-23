@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Crear eventos', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <p>
-        <?= Html::a('Calendario',['calendar'],['class'=>'btn btn-success'])?>
+        <?php //Html::a('Calendario',['calendar'],['class'=>'btn btn-success'])?>
     </p>
 
     <?= GridView::widget([

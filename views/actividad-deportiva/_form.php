@@ -14,7 +14,7 @@ use yii\web\View;
 
 <div class="fa-actividad-deportiva-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['method' => 'post','enableClientValidation' => true]); ?>
 
     <?= $form->field($actividad, 'nombre')->textInput(['maxlength' => true])/*->label('Nombre de AD')*/ ?>
 

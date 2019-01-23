@@ -8,12 +8,14 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\base\ErrorHandler;
 
 /**
  * ArticuloController implements the CRUD actions for FiArticulo model.
  */
 class ArticuloController extends Controller
 {
+    //private static $r=null;
     /**
      * {@inheritdoc}
      */
@@ -35,12 +37,23 @@ class ArticuloController extends Controller
      */
     public function actionIndex()
     {
+        //$session = Yii::$app->session;
+        //$error = isset($_SESSION['error']) ? $_SESSION['error'] : null;
+        //$error = $session->getFlash('error');
+        /*if ($session->has('error')){
+            $error = $session->get('error');
+            //var_dump($error);
+            //exit();
+        }*/
+
+
         $dataProvider = new ActiveDataProvider([
             'query' => FiArticulo::find(),
         ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            //'error' => $error,
         ]);
     }
 
@@ -103,8 +116,29 @@ class ArticuloController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    {  
+         
+        try{
+            $this->findModel($id)->delete();
+            
+        }catch(yii\db\IntegrityException $e){
+            $error="Violación de la restricción de integridad: 1451 No se puede eliminar ni actualizar una fila principal: una restricción de clave externa falla.";
+            /*
+            //ErrorHandler::handleError(302,$error,__FILE__,__LINE__);
+            $dataProvider = new ActiveDataProvider([
+            'query' => FiArticulo::find(),
+            ]);
+
+            return $this->render('index', [
+                'dataProvider' => $dataProvider,
+                'error' => $error,
+            ]);*/
+            //global $r;
+            //$r=1;
+            $session = Yii::$app->session;
+            //$session->set('error', $error);
+            $session->addFlash('error', $error);
+        }
 
         return $this->redirect(['index']);
     }

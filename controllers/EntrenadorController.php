@@ -37,16 +37,9 @@ class EntrenadorController extends Controller
      */
     public function actionIndex()
     {
-        $sql="SELECT id_entrenador,
-        CONCAT(Nombre, ' ',Ap_Pataterno,' ',Ap_Materno) as 'Nombre Completo'
-        ,Tel_Movil as Celular,e_mail as 'Correo Electrónico'
-        FROM fh_entrenador e 
-        INNER JOIN fh_persona p ON e.id_persona=p.id_Persona 
-        INNER JOIN fh_contacto c ON p.id_Persona=c.id_Persona
-        ";
         $query = (new \yii\db\Query())
             ->select(['id_entrenador','p.id_Persona',
-                "CONCAT(Nombre,' ',Ap_Pataterno,' ',Ap_Materno) AS 'Nombre Completo'",
+                "CONCAT(Nombre,' ',Ap_Paterno,' ',Ap_Materno) AS 'Nombre Completo'",
                 'Tel_Movil AS Celular','(e_mail) as "Correo Electrónico"',//(-_-) porque lo acepto solo con ()
                 'e.estado','t.tipo'])
             ->from('fh_entrenador e')

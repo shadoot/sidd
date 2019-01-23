@@ -60,6 +60,13 @@ $config = [
 $config['modules']=[
    'gridview' =>  [
         'class' => '\kartik\grid\Module'
+    ],
+    'markdown' => [
+        'class' => 'kartik\markdown\Module',
+        'smarty' => true,
+         'smartyParams' => [],
+         'smartyYiiApp' => true,
+         'smartyYiiParams' => true,
     ]
 ];
 

@@ -9,7 +9,7 @@ use yii\helpers\Html;
 /* @var $contacto app\models\FhContacto */
 
 $this->title = 'Registrar Entrenador';
-$this->params['breadcrumbs'][] = ['label' => 'Registro de Entrenadores', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Lista de entrenadores', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fh-entrenador-create">

@@ -40,5 +40,3 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
-
-<?php var_dump(Yii::$app); ?>
