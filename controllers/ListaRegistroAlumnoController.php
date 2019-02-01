@@ -37,22 +37,42 @@ class ListaRegistroAlumnoController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
+        /*$dataProvider = new ActiveDataProvider([
             'query' => FaListaRegistroAlumno::find(),
-        ]);
-        /*$sql1="SELECT d.nombre, fecha_registro,Num_Control, CONCAT(p.Nombre,' ', p.Ap_Pataterno,' ', p.Ap_Materno) FROM fa_lista_registro r, fa_actividad_deportiva d, fh_alumno a, fh_persona p WHERE r.id_actividad_deportiva=d.id_actividad_deportiva AND r.id_Alumno=a.id_Alumno AND a.id_Persona=p.id_Persona;";
-        $provider=new SqlDataProvider([
-            'sql'=>$sql1,
         ]);*/
+        
 
-        /*$sql1="SELECT r.id_lista_registro, d.nombre, r.fecha_registro,a.Num_Control as 'Número de Control', CONCAT(p.Nombre,' ', p.Ap_Pataterno,' ',p.Ap_Materno) as Alumno FROM fa_lista_registro_alumno r, fa_actividad_deportiva d, fh_persona p, fh_alumno a WHERE a.id_Persona=p.id_Persona AND r.id_Alumno=a.id_Alumno AND r.id_actividad_deportiva = d.id_actividad_deportiva";
+        $sql1="SELECT 
+                ra.id_lista_registro,
+                a.Num_Control AS 'Número de Control',
+                CONCAT(p.Nombre,
+                        ' ',
+                        p.Ap_Paterno,
+                        ' ',
+                        p.Ap_Materno) AS 'Alumno',
+                d.nombre AS 'Actividad Extracurricular',
+                fp.Periodo AS 'Periodo',
+                fp.Año AS 'Año'
+            FROM
+                fa_lista_registro_alumno ra
+                    INNER JOIN
+                fh_alumno a ON ra.id_Alumno = a.id_Alumno
+                    INNER JOIN
+                fh_persona p ON a.id_Persona = p.id_Persona
+                    INNER JOIN
+                fa_lista_registro_actividad_deportiva rd ON ra.id_lista_registro_actividad_deportiva = rd.id_lista_registro_actividad_deportiva
+                    INNER JOIN
+                fa_actividad_deportiva d ON rd.id_actividad_deportiva = d.id_actividad_deportiva
+                    INNER JOIN
+                fa_periodo fp ON fp.id_Periodo = rd.id_periodo";
+
         $provider=new SqlDataProvider([
             'sql'=>$sql1,
             'key' => 'id_lista_registro',
-        ]);*/
+        ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'dataProvider' => $provider,
         ]);
     }
 
@@ -88,7 +108,7 @@ class ListaRegistroAlumnoController extends Controller
         $alumnoTemporal->addRule(
             ['nombre_temp','numero_control','carrera'], 'required')
             ->addRule(['id_alumno_temp'],'integer')
-            ->addRule('nombre', 'string',['max'=>107]);
+            ->addRule('nombre_temp', 'string',['max'=>107]);
 
         if ($model->load(Yii::$app->request->post())) {
             $query = (new \yii\db\Query())

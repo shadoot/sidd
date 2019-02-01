@@ -114,7 +114,7 @@ class ActividadDeportivaController extends Controller
             $session->addFlash('success','Elemento eliminado');
         } catch (IntegrityException $e) {
             
-            $error="1451 No se puede eliminar el elemento porque esta relacionado con otra tabla";
+            $error="1451 No se puede eliminar la actividad porque esta registrada en otra tabla";
             $session->addFlash('error', $error);
         }
 

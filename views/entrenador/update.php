@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $entrenador app\models\FhEntrenador */
 /* @var $persona app\models\FhPersona */
 /* @var $contacto app\models\FhContacto */
-$nombre=$persona->Nombre . ' ' . $persona->Ap_Pataterno. ' ' . $persona->Ap_Materno;
+$nombre=$persona->Nombre . ' ' . $persona->Ap_Paterno. ' ' . $persona->Ap_Materno;
 $this->title = 'Modificar Entrenador: ' . $nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Lista de Entrenadores', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $nombre, 'url' => ['view', 'id' => $entrenador->id_entrenador]];

@@ -24,9 +24,15 @@ use app\models\FhTipoEntrenador;
 
     <?=	$form->field($persona,'Ap_Materno')->textInput() ?>
 
-    <?=	$form->field($persona,'Genero')->textInput() ?>
-
-    <?=	$form->field($persona,'ECivil')->textInput() ?>
+    <?=	$form->field($persona,'Genero')->textInput()->dropDownList(
+            ['Masculino' => 'Masculino','Femenino' => 'Femenino'],
+            ['prompt'=>'Seleccionar un genero...']
+        ) ?>
+        
+    <?=	$form->field($persona,'ECivil')->textInput()->dropDownList(
+            ['Soltero/a' => 'Soltero/a','Casado/a'=> 'Casado/a'],
+            ['prompt'=>'Seleccionar un estado civil...']
+        ) ?>
 
     <?=	$form->field($persona,'FNacimiento')->widget(\yii\jui\DatePicker::class, [
     	'language' => 'es',
@@ -47,7 +53,7 @@ use app\models\FhTipoEntrenador;
 
     <?php $tipo=ArrayHelper::map(FhTipoEntrenador::find()->all(),'id_tipo_entrenador', 'tipo'); ?>
     <?php echo $form->field($entrenador,'id_tipo_entrenador')->dropDownList(
-            $tipo)->label('Tipo de Entrenador'); ?>
+            $tipo,['prompt'=>'Seleccionar un tipo...'])->label('Tipo de Entrenador'); ?>
 
     <?= $form->field($entrenador,'estado')->checkbox(['label' => 'Activo']) ?>
 

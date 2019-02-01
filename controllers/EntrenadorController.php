@@ -10,6 +10,8 @@ use yii\data\SqlDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\base\ErrorException;
+use yii\db\IntegrityException;
 
 /**
  * EntrenadorController implements the CRUD actions for FhEntrenador model.
@@ -180,8 +182,16 @@ class EntrenadorController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $session = Yii::$app->session;
+        try {
 
+            $this->findModel($id)->delete();
+            $session->addFlash('success','Elemento eliminado');
+        } catch (IntegrityException $e) {
+            
+            $error="1451 No se puede eliminar el entrenador porque esta vinculado con otra tabla";
+            $session->addFlash('error', $error);
+        }
         return $this->redirect(['index']);
     }
 

@@ -32,8 +32,8 @@ class FaListaRegistroActividadDeportiva extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_entrenador', 'id_actividad_deportiva', 'fecha', 'en_curso','id_periodo'], 'required'],
-            [['id_entrenador', 'id_actividad_deportiva', 'en_curso'], 'integer'],
+            [['id_entrenador', 'id_actividad_deportiva', 'fecha', 'en_curso','id_periodo','id_tipo_entrenador'], 'required'],
+            [['id_entrenador', 'id_actividad_deportiva', 'en_curso','id_tipo_entrenador'], 'integer'],
             [['fecha'], 'safe'],
             [['id_entrenador'], 'exist', 'skipOnError' => true, 'targetClass' => FhEntrenador::className(), 'targetAttribute' => ['id_entrenador' => 'id_entrenador']],
             [['id_actividad_deportiva'], 'exist', 'skipOnError' => true, 'targetClass' => FaActividadDeportiva::className(), 'targetAttribute' => ['id_actividad_deportiva' => 'id_actividad_deportiva']],

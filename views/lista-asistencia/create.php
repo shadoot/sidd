@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_formTable', [
+    <?= $this->render('_formTabular', [
         'dataProvider' => $dataProvider,
         //'model' => $model,
     ]) ?>

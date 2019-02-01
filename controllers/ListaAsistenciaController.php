@@ -39,7 +39,7 @@ class ListaAsistenciaController extends Controller
 
         $query = (new \yii\db\Query())
                 ->select(['id_lista_registro',
-                    "CONCAT(p.Nombre,' ',p.Ap_Pataterno,' ',p.Ap_Materno) as nombre"])
+                    "CONCAT(p.Nombre,' ',p.Ap_Paterno,' ',p.Ap_Materno) as nombre"])
                 ->from('fa_lista_registro_alumno lra')
                 ->innerjoin('fa_lista_registro_actividad_deportiva lrad',
                     'lra.id_lista_registro_actividad_deportiva=lrad.id_lista_registro_actividad_deportiva')
@@ -92,7 +92,7 @@ class ListaAsistenciaController extends Controller
         ]);*/
         $query = (new \yii\db\Query())
                 ->select(['id_lista_registro',
-                    "CONCAT(p.Nombre,' ',p.Ap_Pataterno,' ',p.Ap_Materno) as nombre"])
+                    "CONCAT(p.Nombre,' ',p.Ap_Paterno,' ',p.Ap_Materno) as nombre"])
                 ->from('fa_lista_registro_alumno lra')
                 ->innerjoin('fa_lista_registro_actividad_deportiva lrad',
                     'lra.id_lista_registro_actividad_deportiva=lrad.id_lista_registro_actividad_deportiva')

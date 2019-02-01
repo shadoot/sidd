@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id_Persona
  * @property string $Nombre
- * @property string $Ap_Pataterno
+ * @property string $Ap_Paterno
  * @property string $Ap_Materno
  * @property string $Genero
  * @property string $ECivil
@@ -35,12 +35,13 @@ class FhPersona extends \yii\db\ActiveRecord
         return [
             [['Nombre', 'Ap_Paterno', 'Ap_Materno', 'Genero', 'ECivil', 'FNacimiento'], 'required'],
             [['FNacimiento'], 'safe'],
-            [['Nombre'], 'string', 'max' => 45],
-            [['Ap_Pataterno', 'Ap_Materno'], 'string', 'max' => 30],
+            [['Nombre'], 'string', 'length' => [3, 45]],
+            [['Ap_Paterno', 'Ap_Materno'], 'string', 'length' => [3, 30]],
             [['Genero'], 'string', 'max' => 10],
             [['ECivil'], 'string', 'max' => 15],
             [['FNacimiento'],'date', 'format'=>'Y-m-d'],
-            [['Nombre','Ap_Paterno',],'match', 'pattern' => '/^[a-z]\w*$/i','message' => '{attribute} solo acepta letras'],
+            [['Nombre','Ap_Paterno','Ap_Materno'],'match', 'pattern' => '/^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$/','message' => '{attribute} solo acepta letras'],
+            
         ];
     }
 
@@ -69,7 +70,7 @@ class FhPersona extends \yii\db\ActiveRecord
     }
 
     public function getNombreCompleto(){
-        return $this->Nombre.' '.$this->Ap_Pataterno.' '.$this->Ap_Materno;
+        return $this->Nombre.' '.$this->Ap_Paterno.' '.$this->Ap_Materno;
     }
 
 }

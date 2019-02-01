@@ -10,7 +10,8 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\base\ErrorException;
+use yii\db\IntegrityException;
 /**
  * ListaRegistroActividadDeportivaController implements the CRUD actions for FaListaRegistroActividadDeportiva model.
  */
@@ -170,8 +171,16 @@ class ListaRegistroActividadDeportivaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $session = Yii::$app->session;
+        try {
 
+            $this->findModel($id)->delete();
+            $session->addFlash('success','Elemento eliminado');
+        } catch (IntegrityException $e) {
+            
+            $error="1451 No se puede eliminar el registro porque contiene alumnos";
+            $session->addFlash('error', $error);
+        }
         return $this->redirect(['index']);
     }
 

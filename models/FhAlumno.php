@@ -37,6 +37,7 @@ class FhAlumno extends \yii\db\ActiveRecord
             [['Num_Control', 'id_Persona', 'id_Carrera', 'id_Semestre'], 'integer'],
             [['Estado'], 'string', 'max' => 12],
             [['Num_Control'], 'unique'],
+            [['Num_Control'],'min' => 8,'max' => 8],
             [['id_Persona'], 'exist', 'skipOnError' => true, 'targetClass' => FhPersona::className(), 'targetAttribute' => ['id_Persona' => 'id_Persona']],
             [['id_Carrera'], 'exist', 'skipOnError' => true, 'targetClass' => FaCarrera::className(), 'targetAttribute' => ['id_Carrera' => 'id_Carrera']],
             [['id_Semestre'], 'exist', 'skipOnError' => true, 'targetClass' => FaSemestre::className(), 'targetAttribute' => ['id_Semestre' => 'id_Semestre']],
@@ -86,7 +87,7 @@ class FhAlumno extends \yii\db\ActiveRecord
     {
         $allNumeroControl;
         $query = (new \yii\db\Query())
-            ->select(["Num_Control as numero,CONCAT(p.Nombre,' ',Ap_Pataterno,' ',Ap_Materno) as nombre, c.Nombre as carrera"])
+            ->select(["Num_Control as numero,CONCAT(p.Nombre,' ',Ap_Paterno,' ',Ap_Materno) as nombre, c.Nombre as carrera"])
             ->from('fh_alumno a')
             ->innerjoin('fh_persona p','a.id_Persona=p.id_Persona')
             ->innerjoin('fa_carrera c','a.id_Carrera=c.id_Carrera');

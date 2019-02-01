@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
+use app\models\FhTipoEntrenador;
 
 /* @var $this yii\web\View */
 /* @var $rad app\models\FaListaRegistroActividadDeportiva */
@@ -15,7 +16,7 @@ use yii\widgets\ActiveForm;
 
 <div class="fa-lista-registro-actividad-deportiva-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['method' => 'post','enableClientValidation' => true]); ?>
 
     <?= Html::activeHiddenInput($personaTemporal, 'id_temporal') ?>
 
@@ -33,14 +34,14 @@ use yii\widgets\ActiveForm;
     		
     	],
     	'options' => ['class' => 'form-control'],
-	]) ?>
+	])->label('Nombre de Entrenador') ?>
 
     
     <?php 
     	$actividad_deportiva=ArrayHelper::map(FaActividadDeportiva::find()
     		->where('estado=:estado')->addParams([':estado' => 1])->all(),'id_actividad_deportiva', 'nombre');
     	echo $form->field($rad,'id_actividad_deportiva')->dropDownList(
-    		$actividad_deportiva)->label('Actividad Deportiva');
+    		$actividad_deportiva,['prompt'=>'Seleccionar una actividad deportiva...'])->label('Actividad Deportiva');
      ?>
 
     <?= $form->field($rad, 'fecha')->widget(\yii\jui\DatePicker::class, [
@@ -61,8 +62,12 @@ use yii\widgets\ActiveForm;
     	$actividad_deportiva=ArrayHelper::map(FaPeriodo::getPeriodo(),
     		'id_Periodo','Periodo');
     	echo $form->field($rad,'id_periodo')->dropDownList(
-    		$actividad_deportiva)->label('Periodo de la actividad');
+    		$actividad_deportiva,['prompt'=>'Seleccionar un periodo...'])->label('Periodo de la actividad');
      ?>
+
+     <?php $tipo=ArrayHelper::map(FhTipoEntrenador::find()->all(),'id_tipo_entrenador', 'tipo'); ?>
+    <?php echo $form->field($rad,'id_tipo_entrenador')->dropDownList(
+            $tipo,['prompt'=>'Seleccionar un tipo...'])->label('Tipo de Entrenador'); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Registar', ['class' => 'btn btn-success']) ?>

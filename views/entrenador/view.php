@@ -8,7 +8,7 @@ use yii\widgets\DetailView;
 /* @var $persona app\models\FhPersona */
 /* @var $contacto app\models\FhContacto */
 
-$this->title = $persona->Nombre . ' ' . $persona->Ap_Pataterno. ' ' . $persona->Ap_Materno;
+$this->title = $persona->Nombre . ' ' . $persona->Ap_Paterno. ' ' . $persona->Ap_Materno;
 $this->params['breadcrumbs'][] = ['label' => 'Lista de Entrenadores', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             [
                 'label' => 'Nombre Completo',
-                'value' => $persona->Nombre . ' ' . $persona->Ap_Pataterno. ' ' . $persona->Ap_Materno,
+                'value' => $persona->Nombre . ' ' . $persona->Ap_Paterno. ' ' . $persona->Ap_Materno,
             ],
             [
                 'label' => 'Telefono',

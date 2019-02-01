@@ -15,7 +15,7 @@ use yii\web\JsExpression;
 
 <div class="lista-registro-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['method' => 'post','enableClientValidation' => true]); ?>
 
     <?= $form->field($model, 'id_Alumno')->widget(\yii\jui\AutoComplete::classname(), [
     	'clientOptions' => [
@@ -24,8 +24,6 @@ use yii\web\JsExpression;
                             $('#dynamicmodel-nombre_temp').val(ui.item.nombre);
                             $('#dynamicmodel-numero_control').text(ui.item.value);
                             $('#dynamicmodel-carrera').val(ui.item.carrera);
-
-                            console.log(ui);
                         }"),
     	],
         'options' => ['class' => 'form-control'],
@@ -42,9 +40,7 @@ use yii\web\JsExpression;
     	$actividad_deportiva=ArrayHelper::map(FaListaRegistroAlumno::getActividadDeportivaEnCurso(),'id_lrad', 'nombre');
     	echo $form->field($model,'id_lista_registro_actividad_deportiva')->dropDownList(
     		$actividad_deportiva,
-    		[
-    			'promt'=>'Eliga una actividad',
-    		]
+    		['prompt'=>'Seleccionar una actividad deportiva...']
     	);
      ?>
 

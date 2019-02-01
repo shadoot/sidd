@@ -10,7 +10,7 @@ use kartik\mpdf\Pdf;
 
 class ConstanciaController extends Controller
 {
-	public function actionIndex()
+	public function actionIndexExt()
     {
         /*$content = $this->renderPartial('_constanciaView',[
         	'alumno' => 'Roberto Piñeda José',
@@ -141,6 +141,11 @@ class ConstanciaController extends Controller
 			</body>
 		</html>"
     	;
+    }
+
+    public function actionIndex()
+    {
+    	return $this->render('index');
     }
 }
 

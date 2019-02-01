@@ -32,7 +32,8 @@ class FhContacto extends \yii\db\ActiveRecord
             [['e_mail', 'id_Persona'], 'required'],
             [['id_Persona'], 'integer'],
             [['Tel_Fijo', 'Tel_Movil'], 'string', 'max' => 15],
-            [['e_mail'], 'string', 'max' => 40],
+            [['e_mail'], 'string', 'length' => [7, 40]],
+            [['e_mail'],'email'],
         ];
     }
 

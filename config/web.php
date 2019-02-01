@@ -5,7 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'name'=>'sidd',
+    'name'=>'Sistema de Informacion del Departamento Deportivo del ITSRV',
     'basePath' => dirname(__DIR__),
     'language' => 'es',
     'bootstrap' => ['log'],

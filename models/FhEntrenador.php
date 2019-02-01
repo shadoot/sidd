@@ -73,7 +73,7 @@ class FhEntrenador extends \yii\db\ActiveRecord
     {
         $allNameEntrenadores;
         $query = (new \yii\db\Query())
-            ->select(["CONCAT(Nombre,' ',Ap_Pataterno,' ',Ap_Materno) as nombre",'e.id_entrenador'])
+            ->select(["CONCAT(Nombre,' ',Ap_Paterno,' ',Ap_Materno) as nombre",'e.id_entrenador'])
             //->select('p.id_Persona')
             ->from('fh_persona p')
             ->innerjoin('fh_entrenador e','p.id_Persona=e.id_persona')
@@ -98,7 +98,7 @@ class FhEntrenador extends \yii\db\ActiveRecord
     public function getNombreCompleto($id)
     {
         $query = (new \yii\db\Query())
-            ->select(["CONCAT(Nombre,' ',Ap_Pataterno,' ',Ap_Materno) as nombre"])
+            ->select(["CONCAT(Nombre,' ',Ap_Paterno,' ',Ap_Materno) as nombre"])
             ->from('fh_persona p')
             ->innerjoin('fh_entrenador e','p.id_Persona=e.id_persona')
             ->where('e.id_entrenador=:id_entrenador')
