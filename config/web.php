@@ -63,10 +63,10 @@ $config['modules']=[
     ],
     'markdown' => [
         'class' => 'kartik\markdown\Module',
-        'smarty' => true,
-         'smartyParams' => [],
-         'smartyYiiApp' => true,
-         'smartyYiiParams' => true,
+        //'smarty' => true,
+        // 'smartyParams' => [],
+        // 'smartyYiiApp' => true,
+        // 'smartyYiiParams' => true,
     ]
 ];
 

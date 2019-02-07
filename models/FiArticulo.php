@@ -30,8 +30,8 @@ class FiArticulo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['nombre','descripcion'],'required'],
             [['nombre'], 'string', 'max' => 10],
-            [['descripcion'], 'string', 'max' => 15],
         ];
     }
 

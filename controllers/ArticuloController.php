@@ -9,6 +9,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\base\ErrorHandler;
+use yii\helpers\Json;
+use yii\helpers\HtmlPurifier;
+use kartik\markdown\Markdown;
+
 
 /**
  * ArticuloController implements the CRUD actions for FiArticulo model.
@@ -157,5 +161,19 @@ class ArticuloController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionPreview()
+    {
+        $module = Yii::$app->getModule('markdown');
+        /*if (\Yii::$app->user->can('smarty')) {
+            $module->smarty = true;
+            $module->smartyYiiApp = \Yii::$app->user->can('smartyYiiApp') ? true : false;
+            $module->smartyYiiParams = Yii::$app->user->can('smartyYiiParams') ? true : false;
+        }*/
+        if (isset($_POST['source'])) {
+            $output = (strlen($_POST['source']) > 0) ? Markdown::convert($_POST['source'], ['custom' => $module->customConversion]) : $_POST['nullMsg'];
+        }
+        echo Json::encode(HtmlPurifier::process($output));
     }
 }

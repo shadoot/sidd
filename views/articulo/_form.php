@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\markdown\MarkdownEditor;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\FiArticulo */
@@ -14,7 +16,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
+    <?php //$form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
+
+    <?= MarkdownEditor::widget([
+		'model' => $model, 
+		'attribute' => 'descripcion',
+		'previewAction' => 'articulo/preview',
+	]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

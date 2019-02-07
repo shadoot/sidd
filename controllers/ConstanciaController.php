@@ -6,146 +6,150 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use kartik\mpdf\Pdf;
+use app\models\FaConstancia;
+use yii\helpers\Json;
+use yii\helpers\HtmlPurifier;
+use kartik\markdown\Markdown;
+use yii\data\ActiveDataProvider;
 
 
 class ConstanciaController extends Controller
 {
-	public function actionIndexExt()
+    public function actionIndex()
     {
-        /*$content = $this->renderPartial('_constanciaView',[
-        	'alumno' => 'Roberto Piñeda José',
-        	'carrera' => 'Humanidades',
-        	'numero' => '182650051'
-        ]);*/
+    	$alumnoTemporal = new \yii\base\DynamicModel([
+    		'id_alumno',
+            'numero_control',
+            'nombre',
+            'carrera',
+        ]);
+        $alumnoTemporal->addRule(['nombre','carrera','numero_control'], 'required')
+            ->addRule(['numero_control'],'integer')
+            ->addRule(['nombre'], 'string',['max'=>107])
+            ->addRule(['carrera'],'string');
 
-        $header = $this->renderPartial('_constanciaHeader');
-        //return $header;
-        $pdf = new Pdf([
-	        
+        if(Yii::$app->request->post()){
+        	$alumnoTemporal->load(Yii::$app->request->post());
+        	
+        	$query = (new \yii\db\Query())
+        	->select(["(a.Num_Control) AS 'numero_control'",
+        		"CONCAT( p.Ap_Paterno, ' ', p.Ap_Materno, ' ', p.Nombre) AS 'nombre'",
+        		"(c.Nombre) AS 'carrera'","AVG(r.puntuacion) AS 'promedio'",
+        		"COUNT(lra.id_lista_registro) AS 'actividades'"])
+        	->from('fa_lista_registro_alumno lra')
+        	->innerjoin('fh_alumno a','lra.id_Alumno = a.id_Alumno')
+        	->innerjoin('fa_semestre s','s.id_Semestre = a.id_Semestre')
+        	->innerjoin('fh_persona p','p.id_Persona = a.id_Persona')
+        	->innerjoin('fa_carrera c','c.id_Carrera = a.id_Carrera')
+        	->innerjoin('fa_rendimiento r','r.id_lista_registro_alumno = lra.id_lista_registro')
+        	->where('r.puntuacion >= 70')
+        	->andWhere('a.Num_Control =:numero');
+        	$query->addParams([':numero' => $alumnoTemporal->numero_control]);
+	        $command = $query->createCommand();
+	        $row = $command->queryAll();
+        	//var_dump($row);
+	        return $this->render('preview',['datos' => $row]);
+        	//exit();
+        }
+        //$alumnoTemporal->nombre=null;
+        //$alumnoTemporal->carrera=null;
+    	return $this->render('index',['alumnoTemporal' => $alumnoTemporal]);
+    }
+
+    public function actionConstancia($numero){
+    	$constanciaContent = FaConstancia::find()
+    	->where('activa=1')->one();
+    	
+    	if (is_null($constanciaContent)) {
+    		$session = Yii::$app->session;
+            $session->addFlash('error', 'No hay un Formato de constancia activo. Active uno y repita los pasos anteriores');
+
+    		return $this->redirect(['index']);
+    	}
+    	
+    	$query = (new \yii\db\Query())
+        	->select(["(a.Num_Control) AS 'numero_control'",
+        		"CONCAT( p.Ap_Paterno, ' ', p.Ap_Materno, ' ', p.Nombre) AS 'nombre'",
+        		"(c.Nombre) AS 'carrera'","AVG(r.puntuacion) AS 'promedio'"])
+        	->from('fa_lista_registro_alumno lra')
+        	->innerjoin('fh_alumno a','lra.id_Alumno = a.id_Alumno')
+        	->innerjoin('fa_semestre s','s.id_Semestre = a.id_Semestre')
+        	->innerjoin('fh_persona p','p.id_Persona = a.id_Persona')
+        	->innerjoin('fa_carrera c','c.id_Carrera = a.id_Carrera')
+        	->innerjoin('fa_rendimiento r','r.id_lista_registro_alumno = lra.id_lista_registro')
+        	->where('r.puntuacion >= 70')
+        	->andWhere('a.Num_Control =:numero');
+        	$query->addParams([':numero' => $numero]);
+	        $command = $query->createCommand();
+	        $row = $command->queryAll();
+
+    	//var_dump($articulo);
+        /*    return $this->render('constancia',[
+                'constanciaContent' => $constanciaContent,
+                'datos' => $row,
+            ]);*/
+    	$return = $this->renderPartial('constancia',[
+    		'constanciaContent' =>$constanciaContent,
+    		'datos' => $row,
+    	]); 
+    	$pdf = new Pdf([
 	        'mode' => Pdf::MODE_CORE, 
-	        
 	        'format' => Pdf::FORMAT_A4, 
-	        
 	        'orientation' => Pdf::ORIENT_PORTRAIT, 
-	        
 	        'destination' => Pdf::DEST_BROWSER, 
-	        
-	        //'content' => $content,  
-	        
-	        //'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
-	        'cssFile' => 'css/pdf.css',
-
+	        'content' => $return,  
+	        'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
 	        'cssInline' => '.kv-heading-1{font-size:18px}', 
-	        //'cssInline' => 'css/pdf.css',
-
 	        'options' => ['title' => 'Constancia de actividades deportivas y culturales'],
-	        
 	        /*'methods' => [ 
 	            'SetHeader'=>['header'],
 	            'SetFooter' => ['2017, "Un siglo de las constituciones"'],
         	]*/
     	]);
-
-    	//$pdf->api->SetHeader($header);
-    	//$pdf->api->Cell(0,25,'ALGÚN TÍTULO DE ALGÚN LUGAR',0,0,'C', $pdf->api->Image('img/1280px-SEP_logo_2012.svg.png',20,12,20));
-    	/*$header="<html>
-		<body>
-		    <div>imagen</div>
-		    <img src='img/1280px-SEP_logo_2012.svg.png' />
-		</body>
-		</html>";*/
-    	$pdf->api->SetHeader($this->header());
-    	$pdf->api->WriteHtml($this->content());
-    	//$pdf->api->Output();
-        return $pdf->render(); 
-        /*return $this->renderPartial('_constanciaView',[
-        	'alumno' => 'Roberto Piñeda José',
-        	'carrera' => 'Humanidades',
-        	'numero' => '182650051'
-        ]);*/
-        //return $this->renderPartial('_constanciaHeader');
+    	return $pdf->render(); 
     }
 
-    function header(){
-    	return 
-    	"<html>
-		<body>
-		    <div >
-		    	<img src='img/1280px-SEP_logo_2012.svg.png' width='300' height='104' align='left'/>
-		    </div>
-		    <div class='center'>
-		    	ANEXO XVI. CONSTANCIA DE CUMPLIMIENTO DE ACTIVIDAD COMPLEMENTARIA	
-		    </div>
-		    
-		</body>
-		</html>";
-    }
-    function content(){
-    	return
-    		"<html>
-			<body>
-			<br><br><br><br><br><br>
-				<font face='arial'>
-			    <div>
-			    	<p>
-			    		<B>LIC. CLEMENTE DE JESÚS ACHUTEGUI CAMACHO
-			    		
-			    	<br>
-						ENCARGADO DEL DEPARTAMENTO DE  
-					<br>						
-						SERVICIOS ESCOLARES 
-					<br>
-						PRESENTE.</B> 
-			    	</p>
-			    	
-			    </div>
-			    <div>
-			    	
-			    	<p ALIGN='justify'>
-			    	El que suscribe Ing. Javier Ruiz Aguilar, por este medio se permite hacer de su conocimiento que el estudiante <U> Erick Giovani Lara Moctezuma</U>, con número de control <U>13227055</U> de la carrera de <U>INGENIERÍA INDUSTRIAL</U> ha cumplido su actividad complementaria con el nivel de desempeño _____________ y una valor numérico de _________, durante el período escolar 2013-2016 con un valor curricular de 1 créditos. 
-			    	</p>
-			    	
-			    </div>
-			    <div>
-			    	<p>
-			    		Se extiende la presente en la Ciudad de Rioverde, S.L.P., a los nueve días del mes de abril del año dos mil dieciocho. 
-			    	</p>
-			    </div>
-			    <div>
-			    	<p ALIGN='center'>
-			    		A T E N T A M E N T E <br> Tecnológicamente Superior
-			    	</p>
-			    </div>
-			    <div style='float:left'>
-			    	<p>
-			    		ING. JAVIER RUIZ AGUILAR 
-			    		<br>ENCARGADO DE LA DIVISIÓN DE
-			    		<br> ESTUDIOS PROFESIONALES
-			    		<br>____________________________
-			    	</p>
-			    </div>
-			    <div style='float:left'>
-			    	<p ALIGN='right'>
-			    		LIC. EDUARDO DARIO MATA TORRES 
-			    		<br>SUBDIRECTOR ACADÉMICO
-			    		<br>____________________________
-			    	</p>
-			    </div>
-			    <div style='clear:both'></div>
-			    <div>
-			    	<p>
-			    		L’EDMT/*dcr
-			    	</p>
-			    </div>
-			    </FONT>
-			</body>
-		</html>"
-    	;
+    public function actionCrear(){
+    	$model = new FaConstancia();
+    	if($model->load(Yii::$app->request->post()) && $model->save()){
+    		return $this->redirect(['gestionar']);
+    	}
+    	return $this->render('crear',[
+    		'model' => $model,
+    	]);
     }
 
-    public function actionIndex()
+    public function actionPreview()
     {
-    	return $this->render('index');
+        $module = Yii::$app->getModule('markdown');
+        /*if (\Yii::$app->user->can('smarty')) {
+            $module->smarty = true;
+            $module->smartyYiiApp = \Yii::$app->user->can('smartyYiiApp') ? true : false;
+            $module->smartyYiiParams = Yii::$app->user->can('smartyYiiParams') ? true : false;
+        }*/
+        if (isset($_POST['source'])) {
+            $output = (strlen($_POST['source']) > 0) ? Markdown::convert($_POST['source'], ['custom' => $module->customConversion]) : $_POST['nullMsg'];
+        }
+        echo Json::encode(HtmlPurifier::process($output));
+    }
+
+    public function actionGestionar(){
+    	$dataProvider = new ActiveDataProvider([
+            'query' => FaConstancia::find(),
+        ]);
+        return $this->render('gestionar', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionUpdate($id){
+    	$model = FaConstancia::findOne($id);
+    	if($model->load(Yii::$app->request->post()) && $model->save()){
+    		return $this->redirect(['gestionar']);
+    	}
+    	return $this->render('crear',[
+    		'model' => $model,
+    	]);
     }
 }
 
