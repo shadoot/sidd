@@ -29,9 +29,10 @@ class FhEntrenador extends \yii\db\ActiveRecord
     {
         return [
             [['id_persona','id_tipo_entrenador','estado'], 'required'],
-            [['id_persona','id_tipo_entrenador'], 'integer'],
+            [['id_persona','id_tipo_entrenador','estado'], 'integer'],
             [['id_persona'], 'unique'],
             [['id_persona'], 'exist', 'skipOnError' => true, 'targetClass' => FhPersona::className(), 'targetAttribute' => ['id_persona' => 'id_Persona']],
+            [['id_tipo_entrenador'], 'exist', 'skipOnError' => true, 'targetClass' => FhTipoEntrenador::className(), 'targetAttribute' => ['id_tipo_entrenador' => 'id_tipo_entrenador']],
         ];
     }
 
@@ -52,9 +53,25 @@ class FhEntrenador extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getListaRegistroActividadDeportivas()
+    {
+        return $this->hasMany(FaListaRegistroActividadDeportiva::className(), ['id_entrenador' => 'id_entrenador']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getPersona()
     {
         return $this->hasOne(FhPersona::className(), ['id_Persona' => 'id_persona']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTipoEntrenador()
+    {
+        return $this->hasOne(FhTipoEntrenador::className(), ['id_tipo_entrenador' => 'id_tipo_entrenador']);
     }
 
     public function getIdEntrenador($id_persona)

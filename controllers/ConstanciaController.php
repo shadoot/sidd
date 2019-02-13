@@ -99,7 +99,8 @@ class ConstanciaController extends Controller
 	        'destination' => Pdf::DEST_BROWSER, 
 	        'content' => $return,  
 	        'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
-	        'cssInline' => '.kv-heading-1{font-size:18px}', 
+	        //'cssInline' => '.kv-heading-1{font-size:18px}',
+            'cssInline' => "body {font-family: 'monserrat',font-size:14px, serif;}", 
 	        'options' => ['title' => 'Constancia de actividades deportivas y culturales'],
 	        /*'methods' => [ 
 	            'SetHeader'=>['header'],

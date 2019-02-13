@@ -70,7 +70,7 @@ class FhPersona extends \yii\db\ActiveRecord
     }
 
     public function getNombreCompleto(){
-        return $this->Nombre.' '.$this->Ap_Paterno.' '.$this->Ap_Materno;
+        return $this->Ap_Paterno.' '.$this->Ap_Materno.' '.$this->Nombre;
     }
 
 }

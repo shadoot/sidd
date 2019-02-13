@@ -6,6 +6,7 @@ use Yii;
 use app\models\FhEntrenador;
 use app\models\FhPersona;
 use app\models\FhContacto;
+use app\models\EntrenadorSearch;
 use yii\data\SqlDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -39,6 +40,9 @@ class EntrenadorController extends Controller
      */
     public function actionIndex()
     {
+        /*$searchModel = new EntrenadorSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $query = (new \yii\db\Query())
             ->select(['id_entrenador','p.id_Persona',
                 "CONCAT(Nombre,' ',Ap_Paterno,' ',Ap_Materno) AS 'Nombre Completo'",
@@ -57,6 +61,14 @@ class EntrenadorController extends Controller
 
         return $this->render('index', [
             'provider' => $provider,
+            'searchModel' => $searchModel,
+        ]);*/
+        $searchModel = new EntrenadorSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -68,14 +80,22 @@ class EntrenadorController extends Controller
      */
     public function actionView($id)
     {
-        $entrenador=FhEntrenador::findOne($id);
-        $persona=FhPersona::findOne($entrenador->id_persona);
-        $contacto=FhContacto::findOne(FhContacto::getContacto($persona->id_Persona));
+        $query= (new \yii\db\Query)
+        ->select(['e.id_entrenador',"concat(p.Nombre,' ',p.Ap_Paterno,' ',p.Ap_Materno) as 'alumno'",'e.estado','p.Genero','p.FNacimiento','t.tipo',
+            'd.nombre','d.rama','per.Periodo','per.Año'])
+        ->from('fh_entrenador e')
+        ->leftjoin('fh_persona p','p.id_Persona = e.id_persona')
+        ->leftjoin('fh_tipo_entrenador t','t.id_tipo_entrenador = e.id_tipo_entrenador')
+        ->leftjoin('fa_lista_registro_actividad_deportiva lrad','lrad.id_entrenador = e.id_entrenador')
+        ->leftjoin('fa_actividad_deportiva d','d.id_actividad_deportiva = lrad.id_actividad_deportiva')
+        ->leftjoin('fa_periodo per','per.id_Periodo = lrad.id_periodo')
+        ->where('e.id_entrenador = :id');
+        $query->addParams([':id' => $id]);
+        $command = $query->createCommand();
+        $row = $command->queryAll();
         
         return $this->render('view', [
-            'entrenador' => $entrenador,
-            'persona' => $persona,
-            'contacto' => $contacto,
+            'row' => $row
         ]);
     }
 

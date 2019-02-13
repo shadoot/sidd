@@ -61,7 +61,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $query= (new \yii\db\Query)
+        ->select(['*'])
+        ->from('fa_evento')
+        ->where("Fecha >= :fecha")
+        ->orderby('Fecha','ASC')
+        ->limit('3');
+        $query->addParams([':fecha' => date('Y/m/d')]);
+        $commandCarreras = $query->createCommand();
+        $row = $commandCarreras->queryAll();
+        return $this->render('index',[
+            'proximosEventos' => $row
+        ]);
     }
 
     /**

@@ -50,6 +50,7 @@ AppAsset::register($this);
                 ['label' => 'Solicitud de constancia', 'url' => ['/constancia/index']],
             ]],
             ['label' => 'Agenda', 'url' => ['/evento/calendar']],
+            ['label' => 'Reportes', 'url' => ['/reporte/index']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (

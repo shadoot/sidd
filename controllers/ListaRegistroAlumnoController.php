@@ -76,6 +76,30 @@ class ListaRegistroAlumnoController extends Controller
         ]);
     }
 
+    public function actionIndex2(){
+        $query = (new \yii\db\Query())
+            ->select(['lrad.id_lista_registro_actividad_deportiva',
+                        'd.nombre',
+                        'd.rama',
+                        'p.Periodo',
+                        'p.Año',
+                        'COUNT(lra.id_Alumno)'])
+            ->from('fa_lista_registro_alumno lra')
+            ->rightjoin('fa_lista_registro_actividad_deportiva lrad','lrad.id_lista_registro_actividad_deportiva = lra.id_lista_registro_actividad_deportiva')
+            ->innerjoin('fa_actividad_deportiva d','d.id_actividad_deportiva = lrad.id_actividad_deportiva')
+            ->innerjoin('fa_periodo p','p.id_Periodo = lrad.id_periodo')
+            ->where('lrad.en_curso = 1')
+            ->groupby('lrad.id_actividad_deportiva');
+        $command = $query->createCommand();
+
+        $provider=new SqlDataProvider([
+            'sql' => $command->sql,
+            'key' => 'id_lista_registro_actividad_deportiva',
+        ]);
+        return $this->render('index2',[
+            'provider'=> $provider
+        ]);
+    }
     /**
      * Displays a single FaListaRegistro model.
      * @param integer $id
@@ -190,5 +214,12 @@ class ListaRegistroAlumnoController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionEdit($id)
+    {
+        return $this->render('edit',[
+            'id' => $id,
+        ]);
     }
 }
