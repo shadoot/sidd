@@ -11,6 +11,7 @@ use yii\helpers\Json;
 use yii\helpers\HtmlPurifier;
 use kartik\markdown\Markdown;
 use yii\data\ActiveDataProvider;
+use yii\web\UploadedFile;
 
 
 class ConstanciaController extends Controller
@@ -65,7 +66,24 @@ class ConstanciaController extends Controller
             $session->addFlash('error', 'No hay un Formato de constancia activo. Active uno y repita los pasos anteriores');
 
     		return $this->redirect(['index']);
-    	}
+    	}/*else{
+            $file = fopen("fonts/custom_config.php", "w");
+
+            fwrite($file, '$this->fontdata["miss"] = [' . PHP_EOL);
+            fwrite($file, "'R' => '../".$constanciaContent->archivo_fuente."'," . PHP_EOL);
+            //fwrite($file, "'B' => 'calibrib.ttf'," . PHP_EOL);
+            fwrite($file, "];" . PHP_EOL);
+
+            fclose($file);
+
+            #$customFontsConfig = 'css/fonts/custom_config.php';
+            #$customFonts = 'css/fonts';
+            $customFontsConfig = Yii::$app->params['mpdfCustomFontsPath'];
+            $customFonts = Yii::$app->params['mpdfCustomFonts'];
+
+            define("_MPDF_SYSTEM_TTFONTS_CONFIG", $customFontsConfig);
+            define("_MPDF_SYSTEM_TTFONTS", $customFonts);
+        }*/
     	
     	$query = (new \yii\db\Query())
         	->select(["(a.Num_Control) AS 'numero_control'",
@@ -83,7 +101,8 @@ class ConstanciaController extends Controller
 	        $command = $query->createCommand();
 	        $row = $command->queryAll();
 
-    	//var_dump($articulo);
+    	//var_dump($constanciaContent);
+        //exit();
         /*    return $this->render('constancia',[
                 'constanciaContent' => $constanciaContent,
                 'datos' => $row,
@@ -92,28 +111,79 @@ class ConstanciaController extends Controller
     		'constanciaContent' =>$constanciaContent,
     		'datos' => $row,
     	]); 
+        
     	$pdf = new Pdf([
-	        'mode' => Pdf::MODE_CORE, 
+	        //'mode' => Pdf::MODE_CORE, 
 	        'format' => Pdf::FORMAT_A4, 
 	        'orientation' => Pdf::ORIENT_PORTRAIT, 
 	        'destination' => Pdf::DEST_BROWSER, 
 	        'content' => $return,  
 	        'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
-	        //'cssInline' => '.kv-heading-1{font-size:18px}',
-            'cssInline' => "body {font-family: 'monserrat',font-size:14px, serif;}", 
-	        'options' => ['title' => 'Constancia de actividades deportivas y culturales'],
+            //'cssFile' => 'css/font.css',
+	        'cssInline' => '.kv-heading-1{font-size:18px}',
+            //'cssInline' => '<body style="font-family: miss; font-size: 10pt;">',
+            /*'cssInline' => "
+            @font-face {
+                font-family: '".$constanciaContent->nombre_fuente."';
+                src: url('../../".$constanciaContent->archivo_fuente."') format('truetype');
+                font-weight: normal;
+                font-weight: normal;
+            }
+            body {font-family: '".$constanciaContent->nombre_fuente."',font-size:14px, serif;}",*/
+	        'options' => [
+                'title' => 'Constancia de actividades deportivas y culturales',
+                'fontDir' => ['fonts'],
+                'fontdata' => [
+                    "'".$constanciaContent->nombre_fuente."'" => [
+                        'R' => $constanciaContent->archivo_fuente,
+                    ]
+                ],
+                'default_font' => "'".$constanciaContent->nombre_fuente."'",
+            ],
 	        /*'methods' => [ 
 	            'SetHeader'=>['header'],
 	            'SetFooter' => ['2017, "Un siglo de las constituciones"'],
-        	]*/
+        	] */
     	]);
+
+        /*$pdf->api->fontdata=[
+            'miss' => [
+                'R' => 'fonts/MissFajardose-Regular.ttf',
+            ]
+        ];*/
+        $pdf->defaultFont='felipa'; 
+
     	return $pdf->render(); 
     }
 
     public function actionCrear(){
     	$model = new FaConstancia();
-    	if($model->load(Yii::$app->request->post()) && $model->save()){
-    		return $this->redirect(['gestionar']);
+    	if($model->load(Yii::$app->request->post())){
+
+            $font = UploadedFile::getInstance($model, 'archivo_fuente');
+            //var_dump($font);
+            exit();
+            if (!is_null($font)) {
+                Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/web/fonts/';
+                $path = Yii::$app->params['uploadPath'] . $font->name;
+                if(file_exists($path)){
+
+                    if(md5_file($path)!=md5_file($font->tempName)){
+                        while(file_exists($path)) {
+                            $temp=$font->name;
+                            $font->name=Yii::$app->security->generateRandomString().'--'.$temp;
+                            $path=Yii::$app->params['uploadPath']. $font->name;
+                        }
+                    }
+                }
+                $font->saveAs($path);
+                $model->archivo_fuente=$font->name;
+            }
+            if ($model->save()) {
+                
+                //return $this->redirect(['gestionar']);
+            }
+    		
     	}
     	return $this->render('crear',[
     		'model' => $model,
@@ -145,9 +215,46 @@ class ConstanciaController extends Controller
 
     public function actionUpdate($id){
     	$model = FaConstancia::findOne($id);
-    	if($model->load(Yii::$app->request->post()) && $model->save()){
-    		return $this->redirect(['gestionar']);
-    	}
+        $fontSource=null;
+
+        if($model->load(Yii::$app->request->post())){
+            $fontSource=Yii::$app->request->post('fontSource');
+            //var_dump(Yii::$app->request->post('fontSource'));
+            $font = UploadedFile::getInstance($model, 'archivo_fuente');
+            //var_dump(is_null($fontSource));
+            //var_dump(is_null($font));
+            //exit();
+            if(!is_null($font)){
+                
+                
+                if (!is_null($font)) {
+                    Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/web/fonts/';
+                    $path = Yii::$app->params['uploadPath'] . $font->name;
+                    if(file_exists($path)){
+
+                        if(md5_file($path)!=md5_file($font->tempName)){
+                            while(file_exists($path) /*&& (md5_file($path)!=md5_file($font->tempName))*/) {
+                                $temp=$font->name;
+                                $font->name=Yii::$app->security->generateRandomString().'--'.$temp;
+                                //$font->name=md5_file($path).'--'.$temp;
+                                $path=Yii::$app->params['uploadPath']. $font->name;
+                            }
+                        }
+                    }
+                    $font->saveAs($path);
+                    $model->archivo_fuente=$font->name;
+                }
+            }else{
+                $model->archivo_fuente=$fontSource;
+            }
+
+            if ($model->save()) {
+                
+                return $this->redirect(['gestionar']);
+            }
+            
+        }
+    	
     	return $this->render('crear',[
     		'model' => $model,
     	]);

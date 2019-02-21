@@ -71,14 +71,16 @@ class EventoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($date=null)
+    public function actionCreate($date=null,$n=null)
     {
         $model = new FaEvento();
+        //var_dump($n!=='ne');
+        //    exit();
         if (isset($date)) {
             
             $model = $this->findModels($date);
             $count=sizeof($model);
-            if($count>0){
+            if($count>0 && $n!=='ne'){
                 if($count==1){
                     return $this->renderAjax('view', [
                         'model' => $model[0],
@@ -104,14 +106,16 @@ class EventoController extends Controller
             return $this->redirect(['calendar']);
         }
         if (isset($date)) {
+            //var_dump('ajax');
+            //exit();
             return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }
         
-        return $this->render('create', [
+        /*return $this->render('create', [
             'model' => $model,
-        ]);
+        ]);*/
     }
 
     /**
@@ -145,7 +149,7 @@ class EventoController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['calendar']);
     }
 
     /**
@@ -332,12 +336,12 @@ class EventoController extends Controller
 
         $count = Yii::$app->db->createCommand('
             SELECT count(e.id_Evento) from fa_evento e inner join fa_evento_anexo a on e.id_Evento=a.id_evento where Fecha between ":f1" and ":f2"',
-                 [':f1' => '2018-11-01', ':f2' => '2018-11-31'])->queryScalar();
+                 [':f1' => '2019-01-01', ':f2' => '2019-02-28'])->queryScalar();
 
         $provider=new SqlDataProvider([
-            'sql' => "select a.id_Evento, Nombre, Fecha, Lugar, e.Descripcion as 'descripcion_evento', Hr_Evento, id_evento_anexo, imagen, a.descripcion as 'descripcion_anexo'from fa_evento e inner join fa_evento_anexo a on e.id_Evento=a.id_evento where e.Fecha between :f1 and :f2",
+            'sql' => "select e.id_Evento, Nombre, Fecha, Lugar, e.Descripcion as 'descripcion_evento', Hr_Evento from fa_evento e where e.Fecha between :f1 and :f2",
             //'totalCount' => $count,
-            'params' => [':f1' => '2018-08-01',':f2' => '2018-12-31'],
+            'params' => [':f1' => '2019-01-01',':f2' => '2019-02-28'],
             'key' => 'id_Evento',
             'pagination' => [
                 'pageSize' => $count,

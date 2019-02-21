@@ -1,5 +1,6 @@
 <?php 
 use kartik\markdown\MarkdownEditor;
+use kartik\file\FileInput;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 
@@ -7,7 +8,7 @@ use yii\helpers\Html;
 
  <div class="fa-constancia-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options'=>['enctype'=>'multipart/form-data']]); ?>
 
     <?=	$form->field($model,'titulo')->textInput()->label('Titulo Del Formato') ?>
 
@@ -16,6 +17,53 @@ use yii\helpers\Html;
 		'attribute' => 'contenido',
 		'previewAction' => 'constancia/preview',
 	]) ?>
+	<br>
+	<?= $form->field($model,'nombre_fuente')->textInput() ?>
+
+	<?php //$form->field($model,'archivo_fuente')->textInput() ?>
+
+	<?php if (isset($model->archivo_fuente) && $model->archivo_fuente!==''
+				&& !is_null($model->archivo_fuente)) {
+		echo Html::HiddenInput('fontSource', $model->archivo_fuente);
+		$name=$model->archivo_fuente;
+		$model->archivo_fuente='
+			<object class="kv-preview-data file-preview-object file-object type-default" data="blob:http://localhost/0d486097-8cfa-4701-a1b3-7280f213a9cc" type="font/ttf" style="width:213px;height:160px;">
+			<param name="movie" value="Felipa-Regular.ttf">
+			<param name="controller" value="true">
+			<param name="allowFullScreen" value="true">
+			<param name="allowScriptAccess" value="always">
+			<param name="autoPlay" value="false">
+			<param name="autoStart" value="false">
+			<param name="quality" value="high">
+			 <div class="file-preview-other">
+			<span class="file-other-icon"><i class="glyphicon glyphicon-file"></i></span>
+			</div>
+			</object>
+			</div><div class="file-thumbnail-footer">
+			    <div class="file-footer-caption" title="'.$name.'">
+			        <div class="file-caption-info">'.$name.'</div>
+			        
+			    </div>';
+	}  ?>
+
+	<?php echo FileInput::widget([
+        'model' => $model,
+        'attribute' => 'archivo_fuente',
+        'options' => ['multiple' => false],
+        'pluginOptions'=>[
+        	'initialPreview' => [
+        		$model->archivo_fuente,
+        	],
+        	//'initialPreviewAsData'=>true,
+        	'initialPreviewAsOther' => true,
+        	'previewFileType' => 'other',
+        	'initialCaption'=>$model->archivo_fuente,
+            'allowedFileExtensions'=>['ttf'],
+            'showUpload' => false,
+        ]
+    ]) ?>
+
+    <br>
 
 	<?= $form->field($model,'activa')->checkbox(['label' => 'Activa']) ?>
 
@@ -29,7 +77,7 @@ use yii\helpers\Html;
 
 <div>
 	<pre>
-El salto de linea se hace un un < br >		
+El salto de linea se hace un un &ltbr&gt		
 
 parametos:
 :nombre			Para mostrar el nombre del alumno comenzando por apellidos

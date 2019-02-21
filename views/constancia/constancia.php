@@ -1,5 +1,17 @@
 <?php 
 use kartik\markdown\Markdown;
+
+ /*Yii::$app->assetManager->bundles['app\assets\AppAsset']=[
+ 	'css' => ['css/site.css','css/font.css'],
+ ];*/
+ /*$this->registerCss("
+    @font-face {
+        font-family: '".$constanciaContent->nombre_fuente."';
+        src: url('/".$constanciaContent->archivo_fuente."') format('truetype');
+        font-weight: normal;
+        font-weight: normal;
+    }
+");*/
 //use cifras\CifrasEnLetras;
 
 Yii::$classMap['CifrasEnLetras'] = '@vendor/cifras/CifrasEnLetras.php';
@@ -28,6 +40,10 @@ if(strpos($content, ':rendimiento()')){
 }
 $diaLetra=CifrasEnLetras::convertirNumeroEnLetras(date('d'));
 $yearLetra=CifrasEnLetras::convertirNumeroEnLetras(date('Y'));
+
+$mesArreglo=[1 => "enero", 2 => "febrero", 3 => "marzo",
+4 =>"abril", 5 => "mayo", 6 => "junio", 7 => "julio", 8 => "agosto",
+ 9 => "septiembre", 10 => "octubre", 11 => "noviembre", 12 => "diciembre"];
 
 setlocale(LC_TIME, 'es_ES');
 $fecha = DateTime::createFromFormat('!m', date('m'));

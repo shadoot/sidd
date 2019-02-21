@@ -70,6 +70,11 @@ $config['modules']=[
     ]
 ];
 
+$config['params']=[
+    'mpdfCustomFontsPath' => 'fonts/custom_config.php',
+    'mpdfCustomFonts' => 'fonts',
+];
+
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';

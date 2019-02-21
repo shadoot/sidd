@@ -10,6 +10,8 @@ use Yii;
  * @property int $id_constancia
  * @property string $titulo
  * @property string $contenido
+ * @property string $nombre_fuente 
+ * @property string $archivo_fuente
  * @property int $activa
  */
 class FaConstancia extends \yii\db\ActiveRecord
@@ -32,7 +34,9 @@ class FaConstancia extends \yii\db\ActiveRecord
             [['contenido'], 'string'],
             [['activa'], 'integer'],
             [['titulo'], 'string', 'max' => 50],
-            [['activa'],'onlyOne','message' => 'Solo puede estar activo uno']
+            [['activa'],'onlyOne','message' => 'Solo puede estar activo uno'],
+            [['nombre_fuente'], 'string', 'max' => 40],
+            [['archivo_fuente'], 'string', 'max' => 255],
         ];
     }
 
@@ -45,6 +49,8 @@ class FaConstancia extends \yii\db\ActiveRecord
             'id_constancia' => 'Id Constancia',
             'titulo' => 'Titulo',
             'contenido' => 'Contenido',
+            'nombre_fuente' => 'Nombre Fuente', 
+            'archivo_fuente' => 'Archivo Fuente',
             'activa' => 'Activa',
         ];
     }

@@ -12,10 +12,10 @@ if(is_array($model)){
     //echo sizeof($model)." Elementos";
     //print_r($model['0']['id_evento']);
     //exit();
-    echo Html::a('Nuevo Anexo', 
+    /*echo Html::a('Nuevo Anexo', 
         ['anexo', 'id' => $model['0']['id_evento'],'n'=>'n'],
          ['class' => 'btn btn-primary']);
-    echo "  ";
+    echo "  ";*/
     echo Html::a('Editar anexo', ['_anexo', 'id' => $model['0']['id_evento']], ['class' => 'btn btn-primary']);
     echo "  ";
     echo Html::button('Nuevo Anexo', 

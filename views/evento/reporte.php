@@ -2,8 +2,9 @@
 use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\widgets\ListView;
     
-    
+    /*
     echo '<div>';
     
     echo GridView::widget([
@@ -34,5 +35,19 @@ use yii\helpers\Html;
         ]
     ]);
     echo '</div>';
-    
+    */
+    echo ListView::widget([
+        'dataProvider' => $provider,
+        'options' => [
+          'tag' => 'div',
+          'class' => 'list-wrapper',
+          'id' => 'list-wrapper',
+        ],
+        'layout' => "{pager}\n{items}",
+        'itemView' => function ($model, $key, $index, $widget) {
+          
+          return $this->render('_evento_lista_item',['model' => $model]);
+        },
+        'emptyText' =>'("-_-)',
+    ]);
  ?>

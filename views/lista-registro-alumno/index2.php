@@ -27,14 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'rama',
             'Periodo',
             'Año',
-            
+            'Alumnos inscritos',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{edit}',
                 'buttons' => [
                     'edit' => function ($url, $model, $key){
                         return Html::a(
-                            '<span class="glyphicon glyphicon-edit"></span>',
+                            '<span class="glyphicon glyphicon-ok"></span>',
                             Url::to(['lista-registro-alumno/edit', 'id' => $model['id_lista_registro_actividad_deportiva']]));
                     },
                 ],

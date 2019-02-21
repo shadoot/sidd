@@ -61,6 +61,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        //var_dump(Yii::$app->controller->id.'/'.Yii::$app->controller->defaultAction==='site/index') ? print_f(['label' => 'Reporte', 'url' => ['/evento/reporte']]) : (null);
+        //exit();
         $query= (new \yii\db\Query)
         ->select(['*'])
         ->from('fa_evento')

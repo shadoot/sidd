@@ -9,7 +9,7 @@ use yii\bootstrap\Modal;
  ?>
 <?php 
 	Modal::begin([
-			'header'=>'<h3>Registro de Eventos</h3>',
+			'header'=>'<h3 id="evento" >Registro de Eventos</h3>',
 			'id'=>'modalEvento',
 			'size'=>'modal-lg',
 		]);
@@ -18,7 +18,7 @@ use yii\bootstrap\Modal;
 		 ?>
 	<?php 
 	Modal::begin([
-			'header'=>'<h3 id="anexo">Agregar Anexo</h3>',
+			'header'=>'<h3 id="anexo" >Agregar Anexo</h3>',
 			'id'=>'modalAnexo',
 			'size'=>'modal-lg',
 		]);

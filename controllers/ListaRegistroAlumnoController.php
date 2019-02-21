@@ -83,7 +83,7 @@ class ListaRegistroAlumnoController extends Controller
                         'd.rama',
                         'p.Periodo',
                         'p.Año',
-                        'COUNT(lra.id_Alumno)'])
+                        "COUNT(lra.id_Alumno) as 'Alumnos inscritos'"])
             ->from('fa_lista_registro_alumno lra')
             ->rightjoin('fa_lista_registro_actividad_deportiva lrad','lrad.id_lista_registro_actividad_deportiva = lra.id_lista_registro_actividad_deportiva')
             ->innerjoin('fa_actividad_deportiva d','d.id_actividad_deportiva = lrad.id_actividad_deportiva')
@@ -218,6 +218,7 @@ class ListaRegistroAlumnoController extends Controller
 
     public function actionEdit($id)
     {
+
         return $this->render('edit',[
             'id' => $id,
         ]);

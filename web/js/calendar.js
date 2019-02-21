@@ -1,8 +1,10 @@
 $(function(){
 	$(document).on('click','.fc-day',function(){
 		var date=$(this).attr('data-date');
+		var titulo='Registro de Eventos';
 		//console.log(this);
 		$.get('index.php?r=evento%2Fcreate',{'date':date},function(data){
+			$('#evento').text(titulo);
 			$('#modalEvento').modal('show')
 				.find('#modalContentEvento')
 				.html(data);
@@ -49,6 +51,17 @@ $(function(){
 		});
 
 	});
+	$(document).on('click','#nuevoEventoModal',function () {
+		var date=$(this).attr('data-date');
+		var titulo='Crear Evento';
+
+		$.get('index.php?r=evento%2Fcreate',{'date':date,'n':'ne'},function(data){
+			$('#evento').text(titulo);
+			$('#modalEvento').modal('show')
+				.find('#modalContentEvento')
+				.html(data);
+		});
+	})
 	/*$(document).on('click','#guardarAnexoAjax',function(){
 		var id=$(this).attr('data-id');
 		var titulo='Visualizar contenido';

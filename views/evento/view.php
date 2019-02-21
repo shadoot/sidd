@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\FaEvento */
 
-$this->title = $model->id_Evento;
+$this->title = $model->Nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Fa Eventos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,20 +15,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id_Evento], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id_Evento], [
+        <?= Html::a('Modificar Evento', ['update', 'id' => $model->id_Evento], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Eliminar Evento', ['delete', 'id' => $model->id_Evento], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => '¿Estas seguro de eliminar este evento?',
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Agregar Nuevo Evento', ['create'], ['class' => 'btn btn-primary', 'id' => 'nuevoEventoModal', 'data-date' => $model->Fecha]) ?>
+        <br>
+        <?= Html::button('Agregar Nuevo Evento', 
+        ['id'=>'nuevoEventoModal','data-date' => $model->Fecha,
+        'class' => 'btn btn-primary']);?>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id_Evento',
+            //'id_Evento',
             'Nombre',
             'Fecha',
             'Lugar',
