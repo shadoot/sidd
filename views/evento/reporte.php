@@ -48,6 +48,6 @@ use yii\widgets\ListView;
           
           return $this->render('_evento_lista_item',['model' => $model]);
         },
-        'emptyText' =>'("-_-)',
+        'emptyText' =>'',
     ]);
  ?>

@@ -21,6 +21,10 @@ foreach ($ListaCarreras as $key => $value) {
 $c = substr_replace ($c, "]", strrpos($c, ","), 2);
 
 echo Highcharts::widget([
+	'scripts' => [
+        'modules/exporting',
+        //'themes/grid-light',
+    ],
 	'options' => '{
 		    "chart": {
 		        "type": "column"
@@ -65,5 +69,7 @@ echo Highcharts::widget([
 		    }]
 		}'
 ]);
+
+
 
  ?>

@@ -45,7 +45,8 @@ use yii\data\ActiveDataProvider;
           
           	
           return $this->render('_anexo_lista',['model' => $model]);
-        }
+        },
+        'emptyText' =>'',
     ]);
 	 ?>
 

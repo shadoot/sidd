@@ -8,7 +8,8 @@ use yii\helpers\Url;
     
     <?php //$model->id_evento_anexo ?>
     <br>
-    <?= Html::img(Url::base(). '/img/evento/'.$model->imagen) ?>
+    <?= Html::img(Url::base(). '/img/evento/'.$model->imagen,
+    ['width' => '500px','height' => 'auto']) ?>
     <br>
     <?= $model->descripcion ?>
     <br>

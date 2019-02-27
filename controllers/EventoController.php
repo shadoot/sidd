@@ -185,7 +185,7 @@ class EventoController extends Controller
         date_default_timezone_set('America/Mexico_City');
         //$lista_eventos=FaEvento::find()->all();
         $lista_eventos = FaEvento::getEventos();
-        $eventos;
+        $eventos=null;
         $hoy=date("Y-m-d"); //$hoy=date("Y-m-d_G:i:s");
         
         foreach ($lista_eventos as $evento) {
@@ -336,12 +336,12 @@ class EventoController extends Controller
 
         $count = Yii::$app->db->createCommand('
             SELECT count(e.id_Evento) from fa_evento e inner join fa_evento_anexo a on e.id_Evento=a.id_evento where Fecha between ":f1" and ":f2"',
-                 [':f1' => '2019-01-01', ':f2' => '2019-02-28'])->queryScalar();
+                 [':f1' => '2019-01-01', ':f2' => '2019-03-31'])->queryScalar();
 
         $provider=new SqlDataProvider([
             'sql' => "select e.id_Evento, Nombre, Fecha, Lugar, e.Descripcion as 'descripcion_evento', Hr_Evento from fa_evento e where e.Fecha between :f1 and :f2",
             //'totalCount' => $count,
-            'params' => [':f1' => '2019-01-01',':f2' => '2019-02-28'],
+            'params' => [':f1' => '2019-01-01',':f2' => '2019-03-31'],
             'key' => 'id_Evento',
             'pagination' => [
                 'pageSize' => $count,
